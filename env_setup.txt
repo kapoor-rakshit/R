@@ -1,0 +1,281 @@
+
+For SetupInstructions REFER : "SetupInstructions.docx"
+
+
+If "node_modules" is not found under cur dir of project, it will move to parent dir, if still not parent dir....
+
+
+-ANGULAR is a FRAMEWORK ,      REACT is a UI LIBRARY which requires different packages to work with for complete application
+-ANGULAR is HTML centric ,     REACT is JS centric
+-ANGULAR is backed by GOOGLE , REACT is backed by FACEBOOK
+-both differs in their internal architecture.
+
+
+
+DO NOT USE JQuery DOM   or  JAVASCRIPT DOM API directly as they work on BROWSER DOM which makes application slower.
+Instead use REACT API way which will use VIRTUAL DOM.
+VIRTUAL DOM is a JS Object.
+Reading and Writing JS Objects are faster than DOM Objects.
+React never reads from real DOM and writes to it only when required.
+
+
+
+JSX is a static HTML + dynamic stuff
+JSX is XML like syntax JavaScript provided by REACT.
+
+
+BABEL makes conversion of JSX to HTML possible as browser understand only HTML.
+
+
+REACT creates a VIRTUAL DOM within <script type="text/babel"> ... </script> tag.
+This type attribute of <script> specifies to BABEL that take JSX and convert to HTML.
+
+".render" provides VIRTUAL DOM to be copied to BROWSER DOM , using args "what to render" and "where to render".
+EVERY REACT component must have a "render" method.
+ 
+".createElement" creates HTML tags using args "tag name", "attribute vals", "value within tag  OR  .createElement of other nested tag".
+
+".createClass" provides JSX syntax for rendering elements ie "what to render", stored in a variable "ReactComponent" (NOTE: REACT vars are in UpperCase)
+
+
+in "main.js" file under "src" dir
+--------------------------------------
+- IMPORT statements
+- ComponentClass extends React.Component  , provides "what to render"
+
+
+in "index.html" file
+-----------------------
+- <div id="cont"></div>                    ,  provides "where to render"
+- <script src="./dist/bundle.js"></script> ,  take all JS from all dirs in cur dir and bundle it to a bundle called bundle.js
+
+
+in "webpack.config.js" file to CREATE a BUNDLE.js
+---------------------------------------------------
+ANGULAR CLI also internally uses WEBPACK.
+
+To run webpack.config.js to create bundle command  ,  > webpack --mode=development
+
+module.exports = {
+entry: './src/main.js', 
+output: {
+	filename: 'bundle.js',
+	path: __dirname + '/dist'
+},  
+module: {
+	rules: [
+		{
+		test: /\.js$/, 
+		exclude: /node_modules/, 
+		loader: 'babel-loader', 
+		options: {
+			presets: ['react']
+			}
+		}
+		]
+	}
+};
+
+in "dist" dir we have a "bundle.js" created
+---------------------------------------------
+
+SUMMARY
+========
+1) Go to Node.js Cmd Prompt and to proper directory.
+2) > webpack --mode=development -> Builds and create bundle.js in dist directory.
+3) > hs                          > or http-server -> Simple http server - Port 8080 , similar to "ng serve"
+4) Go to Google Chrome
+5) http://localhost:8080/
+6) Ctrl-Shift-J or F12   (JavaScript Console)
+
+Working Flow
+-------------
+ "index.html"       (specify css link, js script, bundle path to use)
+ "dist/bundle.js"   (specify entry point of application ie  "main.js" )
+ "REACT COMPONENTS" (components called as per their call hierarchy)
+
+
+Same ReactComponent can be used multiple times by nesting them all in a <div> ... </div>
+if required to be rendered to same place.
+
+
+
+PROPERTIES (props)
+===================
+REACT components can be made dynamic by adding PROPERTIES to them.
+Just like attributes are added to HTML tags.
+- PROPERTIES are immutable and can only be read from COMPONENT not modified.
+- constructor(props) { super(props); }
+- any variable is accessed using { }
+- { this.props.COMPONENT_VARIABLE }         // access property using keyword "props"
+- { this.props.children }                   // access children of REACT COMPONENT
+
+
+
+EVENT HANDLING
+===============
+- Same events as of HTML , but with NAMING CONVENTION of camelCase (eg:- onClick = {this.func1} )
+  NOTE : Here we have not added () ie this.func1() as in HTML because it will call the func everytime COMPONENT loads.
+- constructor(props) { 
+	super(props); 
+	this.func1 = this.func1.bind(this);              // bind functions to function vars
+	this.func2 = this.func2.bind(this);
+	this.func3 = this.func3.bind(this);
+	}
+- onClick , onChange , defaultChecked, onInput
+
+
+
+STATES
+=======
+- Provide a way to update VIRTUAL DOM and then compare to BROWSER DOM.
+  This makes it fast as to only update the content changed and not the entire data.
+- constructor(props){
+	this.state = {                                // a JSON inside constructor for init values of vars , with keyword .state
+	   checked: false
+ 	};
+  }
+- this.setState( { checked: !this.state.checked } )  // modify values in JSON , with keyword .setState
+
+
+
+REFS
+=====
+- Useful in FORMS
+- < input ref="VARNAME" >         //        use ref as an identifier
+- this.refs.VARNAME.value         // NOTE : use of refs , as there can be multiple fields (refs)
+
+
+
+PROPTYPES
+==========
+- Useful in DEVELOPMENT phase for validation.
+- ReactComponent.propTypes = {                       // check over Props
+		name: PropTypes.string.isRequired,
+		skills: PropTypes.array,
+		age(props, propName){                // first arg is array of all PROPS and second arg is current PROP ie age here
+			if(props[propName] > 100){
+				return new Error("");
+			}
+		}
+	 };
+- ReactComponent.defaultProps = {                 // default values defined if in absence of parameters passed to ReactComponent
+		name: "RA20024024",
+		age: 56
+	};
+- REACT will remove propTypes automatically in PRODUCTION build which are entered in DEVELOPMENT.
+
+
+
+COMPONENT LIFECYCLE
+=====================
+INITIAL RENDER
+----------------
+- componentWillMount     -->   render   -->   componentDidMount
+ (similar to ngOnInit)                     (AJAX calls , http requests can be made here)
+ (set initial state)                       (Component's DOM exist)
+
+NOT INITIAL RENDER
+-------------------
+- componentWillUpdate   -->   render   -->    componentDidUpdate
+
+REMOVE
+-------
+- componentWillUnmount
+  (before component is removed from DOM , used for cleanup)
+
+PROPS
+------
+- componentWillReceiveProps
+  (Similar to ngOnChanges)
+  (Not initial render , called when props are changed , used to set state before render)
+  (OUTER COMPONENT can pass values to INNER COMPONENT)
+
+
+
+ROUTES
+=======
+ Use of  "axios"  in  place  of     http
+         "react-router-dom"  similar to app.routing.ts functionality
+         "this.props.history.push('/')"  or  "history.replace('/')"  uses "withRouter"  similar to this.router.navigate([''])
+         "this.props.match.params.id"    similar to ActvatedRoute to get :id from URL
+	 <Redirect  from="OLD_ROUTE"  to="NEW_ROUTE" />
+	 If no path specified in <Route /> , it will consider it as a default just like in c/cpp Switch case
+	 
+Transition into and Transition out
+-----------------------------------
+Transition into  -->  Prevent to go to a restricted page which requires LOGIN.
+
+Transition out   -->  Prevent user to navigate , if mistakenly click on back arrow or other link , when formdata is modified
+                      use <Prompt /> REACT component for displaying confirmation 'message' and 'when' to show
+
+
+
+FLUX
+======
+NOTE : It's always recommended to use FLUX within our applications.
+
+It's a principle based on unidirectional flow.
+	"ANYTHING on VIEW must follow ACTION DISPATCHER flow"
+
+Applications might demand new features to be added, which require their testing.
+FLUX provides a maintainability of these features.
+It uses a FLUX ARCHITECTURE.
+
+IT HAS A DEFINED DIR STRUCTURE
+-------------------------------
+ "ACTIONS" dir
+	Dispatch , action type  and  payload (data , optional but not always)
+
+ "COMPONENTS" dir
+	REACT Components.
+
+ "CONSTANTS" dir
+	constants for action types strings.
+
+ "DISPATCHER" dir
+	export Dispatcher class.
+	Dispatches actions to all STORES.
+
+ "STORES" dir
+	Dispatcher registers here.
+	update internal structure and inform view about change.
+	STORE is a publisher and VIEW is a subscriber.
+
+
+
+USE of LODASH
+==============
+
+
+
+BOOTSTRAP REFRENCE
+===================
+https://reactstrap.github.io/
+https://react-bootstrap.github.io/getting-started/introduction
+https://reactjs.org/
+
+
+
+NEW PROJECT using tool
+=======================
+- npm install -g create-react-app
+- create-react-app APPNAME
+
+CHECK package.json for these options
+======================================
+
+  npm start
+    Starts the development server.
+    similar to "ng serve"
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+

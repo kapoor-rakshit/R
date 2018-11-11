@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../react.js"></script>
+        <script src="../react-dom.js"></script>
+        <title>First React Demo</title>
+    </head>
+    <body>
+    <div id="mycontainer"></div>
+    <script>
+        ReactDOM.render(React.createElement("div", null,
+						React.createElement("h1", null, "Welcome to React")
+					), document.getElementById('mycontainer'));
+    </script>
+    </body>
+</html>

@@ -1,0 +1,8 @@
+div#demo-container {
+	background-color: lightgrey;
+	height: 70px;
+	width: 300px;
+	padding: 15px;
+	border: 25px solid navy;
+	margin: 15px;
+}

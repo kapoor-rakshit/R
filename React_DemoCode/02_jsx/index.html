@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../react.js"></script>
+        <script src="../react-dom.js"></script>
+        <script src="../browser.js"></script>
+        <title>React JSX demo</title>
+    </head>
+    <body>
+    <div id="mycontainer"></div>
+    <script type="text/babel"> // ES5 JS
+        var ReactComponent = React.createClass({
+            render: function() {
+                return (<div>
+							           <h1>Welcome to React</h1>
+                       </div>
+						            );
+            }
+        });
+        ReactDOM.render(<ReactComponent/>, document.getElementById('mycontainer'));
+    </script>
+    </body>
+</html>
