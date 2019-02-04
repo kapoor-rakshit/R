@@ -1,0 +1,58 @@
+
+Need of REDUX
+==============
+- An architecture or principle just like FLUX.
+- Unidirectional Flow
+- ACTION triggers STATE change
+- STATE change happens in REDUCER while STORE maintains only CURRENT STATE, while in FLUX STATE change happens in STORES
+- ROOT REDUCER has only DATA STRUCTURE , REDUCER have actual code
+- All ACTIONS go to all REDUCERS , in FLUX all ACTIONS go to all STORES
+- Do not have DISPATCHER
+
+- For complicated applications , but better to use in all applications.
+
+- REDUX maintains UI state:
+	1. Getting current state
+	2. Update state which is an ACTION
+	
+	UI state includes
+	------------------
+	1. data coming on screen
+	2. buffer or cache data
+	3. button enabled/disabled
+	4. active route
+	5. selected tab.... and many more...
+
+- REACT maintains VIRTUAL DOM and REDUX maintains UI state
+
+
+
+REDUX PRINCIPLES
+=================
+
+- Single source of truth
+-------------------------
+	State of entire application stored in a single JavaScript object
+
+- State is READ-ONLY
+----------------------
+	Cannot update state directly , but only possible via emitting an ACTION
+
+- Changes are made with pure functions
+---------------------------------------
+	Pure functions always return same value
+	PURE FUNCTIONS aka REDUCER accept ACTION and GET-UPDATE STATE.
+
+
+
+SPLIT OPERATOR
+===============
+... (three dots before an ARRAY, act as a split operator , and each element becomes individual stand)
+    Provides immutable CREATE, READ, UPDATE, DELETE
+
+
+
+METHODS of calling DISPATCH
+============================
+
+
