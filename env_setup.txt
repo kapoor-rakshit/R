@@ -108,7 +108,7 @@ Just like attributes are added to HTML tags.
 - constructor(props) { super(props); }
 - any variable is accessed using { }
 - { this.props.COMPONENT_VARIABLE }         // access property using keyword "props"
-- { this.props.children }                   // access children of REACT COMPONENT
+- { this.props.children }                   // access children of REACT COMPONENT  ie  <ReactComponent> CHILDREN </ReactComponent>
 
 
 
@@ -118,9 +118,9 @@ EVENT HANDLING
   NOTE : Here we have not added () ie this.func1() as in HTML because it will call the func everytime COMPONENT loads.
 - constructor(props) { 
 	super(props); 
-	this.func1 = this.func1.bind(this);              // bind functions to function vars
-	this.func2 = this.func2.bind(this);
-	this.func3 = this.func3.bind(this);
+	this.func1VAR = this.func1.bind(this);              // bind functions to function vars
+	this.func2VAR = this.func2.bind(this);
+	this.func3VAR = this.func3.bind(this);
 	}
 - onClick , onChange , defaultChecked, onInput
 
@@ -132,7 +132,8 @@ STATES
   This makes it fast as to only update the content changed and not the entire data.
 - constructor(props){
 	this.state = {                                // a JSON inside constructor for init values of vars , with keyword .state
-	   checked: false
+	   checkedVAR: false,
+                   VAR2: true
  	};
   }
 - this.setState( { checked: !this.state.checked } )  // modify values in JSON , with keyword .setState

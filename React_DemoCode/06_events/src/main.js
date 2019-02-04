@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 class ReactComponent extends React.Component {
     constructor(props) {
       super(props);
-      this.add = this.add.bind(this);
-      this.edit = this.edit.bind(this);
-      this.delete = this.delete.bind(this);
+      this.addFuncvar = this.add.bind(this);
+      this.editFuncvar = this.edit.bind(this);
+      this.deleteFuncvar = this.delete.bind(this);
     }
     add() {
         alert('Add clicked');
@@ -20,14 +20,15 @@ class ReactComponent extends React.Component {
     render() {
         return (
             <div>
+                {this.props.agenda}
                 <h2>{this.props.children}</h2>
-                <button onClick={this.add}>Add</button>
-                <button onClick={this.edit}>Edit</button>
-                <button onClick={this.delete} >Delete</button>
+                <button onClick={this.addFuncvar}> Add ka Button</button>
+                <button onClick={this.editFuncvar}> Edit ka Button</button>
+                <button onClick={this.deleteFuncvar}> Delete ka Button</button>
             </div>
             );
     }
 }
 
-ReactDOM.render(<ReactComponent>Event Demo</ReactComponent>,
+ReactDOM.render(<ReactComponent agenda="Agenda">Event Demo</ReactComponent>,
     document.getElementById('mycontainer'));
