@@ -9,6 +9,7 @@ import CommentApi from '../data/CommentApi';
 class AddCommentPage extends React.Component {
     constructor(props) {
       super(props);
+      
       this.saveComment = this.saveComment.bind(this);
     }
 

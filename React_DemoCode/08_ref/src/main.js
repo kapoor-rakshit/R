@@ -2,25 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class ReactComponent extends React.Component {
+
 	constructor(props) {
 		super(props);
-		this.retrieve = this.retrieve.bind(this);
+		this.retrieveFUNCvar = this.retrieve.bind(this);
 	}
 
 	retrieve() {
         var name = this.refs.name.value;
-        alert("Retrieved name from text box: " + name);
+        var age = this.refs.age.value;
+        document.getElementById("values").innerHTML = name + " " + age;
 	}
 
 	render() {
-		return (<div>
+		return (
+			<div>
 				<h2>{this.props.children}</h2>
-				<span>Enter your name: </span>
+				<span>Enter your name: </ span>
 				<input type="text" ref="name"/><br/><br/>
-				<button onClick={this.retrieve} >Retrieve name and display</button>
-			</div>);
+				<span>Enter age: </span>
+				<input type="number" ref="age" pattern="[1-9]+"/><br/><br/>
+				<p id="values"/><br/><br/>
+				<button onClick={this.retrieveFUNCvar}>Retrieve name and display</button>
+			</ div>
+			);
 	}
 }
 
-ReactDOM.render(<ReactComponent>Ref Demo</ReactComponent>,
-    document.getElementById('mycontainer'));
+ReactDOM.render(<ReactComponent>Ref Demo</ReactComponent>,document.getElementById('mycontainer'));

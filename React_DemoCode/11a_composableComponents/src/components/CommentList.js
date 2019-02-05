@@ -4,7 +4,7 @@ import Comment from './Comment';
 export default class CommentList extends React.Component {
   render () {
     var commentNodes = this.props.comments.map(comment => (
-        <Comment key={comment.id} author={comment.author}>
+        <Comment key={comment.id} srno={comment.id} author={comment.author}>
           {comment.text}
         </Comment>
     ));
@@ -13,6 +13,7 @@ export default class CommentList extends React.Component {
         <table>
           <thead>
             <tr>
+              <th>Sr. No.</th>
               <th>Author</th>
               <th>Comment</th>
             </tr>

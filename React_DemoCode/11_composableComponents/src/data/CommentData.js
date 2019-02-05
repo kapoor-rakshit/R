@@ -1,4 +1,5 @@
 export default {
+
   comments:
   [
     {
@@ -17,4 +18,5 @@ export default {
       "text": "React can be used to develop SPA"
     }
   ]
-};
+
+}

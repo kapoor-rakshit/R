@@ -1,9 +1,12 @@
 import React from 'react';
 
 export default class InnerComponent extends React.Component {
+
   constructor(props) {
       super(props);
+
       this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+
       this.state = {
         nameInCapitals: "DEFAULT",
         checked: false
@@ -37,7 +40,7 @@ export default class InnerComponent extends React.Component {
         <br/>
         <input type="checkbox" onChange={this.handleCheckboxChange} defaultChecked={this.state.checked}/>
         <span>{currentState} state</span>
-      </div>
+      </ div>
     );
   }
 }

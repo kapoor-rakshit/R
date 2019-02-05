@@ -1,7 +1,7 @@
-import CommentData from './CommentData';
+import tempvar from './CommentData';
 
 export default class CommentApi {
 	static getAllComments() {
-    return CommentData.comments;
+    return tempvar.comments;
 	}
 }

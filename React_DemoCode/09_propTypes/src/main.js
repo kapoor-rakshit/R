@@ -3,18 +3,21 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 class ReactComponent extends React.Component {
+
   constructor(props) {
     super(props);
   }
 
   render() {
-		return (<div>
+		return (
+      <div>
 				<h2>{this.props.children}</h2>
 				<h4>Check the warning messages in the JavaScript console</h4>
 				<p>Name : {this.props.name}</p>
 				<p>Projects : {this.props.projects}</p>
 				<p>Age : {this.props.age}</p>
-			</div>);
+			</ div>
+      );
 	}
 }
 
@@ -22,18 +25,23 @@ ReactComponent.propTypes = {
   name: PropTypes.string.isRequired,
   projects: PropTypes.array,
   age (props, propName) {
+
       if (typeof props[propName] !== "number"){
           return new Error("Age must be a number");
       }
+
       if (props[propName] > 100) {
           return new Error("Age entered is " + props[propName] + ", it should be less than or equal to 100");
       }
   }
 };
-/*
+
 ReactComponent.defaultProps = {
-    name: "Vinay"
+    name: "user",
+    age: "NA",
+    projects: "NA"
 };
-*/
-ReactDOM.render(<ReactComponent projects={"ShoppingCart"} age={201}>PropTypes demo</ReactComponent>,
+
+var projArr = ["ShoppingCart", "BookMyBus", "IssueTracker"];
+ReactDOM.render(<ReactComponent projects={projArr} age={89}>PropTypes demo</ReactComponent>,
     document.getElementById('mycontainer'));

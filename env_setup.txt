@@ -103,6 +103,7 @@ if required to be rendered to same place.
 PROPERTIES (props)
 ===================
 REACT components can be made dynamic by adding PROPERTIES to them.
+  - JSX value of PROPERTIES should be either an expression ( {  } ) or a quoted ( "  " ) JSX text
 Just like attributes are added to HTML tags.
 - PROPERTIES are immutable and can only be read from COMPONENT not modified.
 - constructor(props) { super(props); }
@@ -151,7 +152,7 @@ REFS
 PROPTYPES
 ==========
 - Useful in DEVELOPMENT phase for validation.
-- ReactComponent.propTypes = {                       // check over Props
+- ReactComponent.propTypes = {                                 // check over Props
 		name: PropTypes.string.isRequired,
 		skills: PropTypes.array,
 		age(props, propName){                // first arg is array of all PROPS and second arg is current PROP ie age here
@@ -160,7 +161,7 @@ PROPTYPES
 			}
 		}
 	 };
-- ReactComponent.defaultProps = {                 // default values defined if in absence of parameters passed to ReactComponent
+- ReactComponent.defaultProps = {                            // default values defined if in absence of parameters passed to ReactComponent
 		name: "RA20024024",
 		age: 56
 	};

@@ -6,8 +6,9 @@ import CommentApi from '../data/CommentApi';
 export default class AllCommentsPage extends React.Component {
     constructor(props) {
 		    super(props);
-        this.state = {
-          comments: []
+
+            this.state = {
+                comments: []
         };
     }
     componentDidMount() {
