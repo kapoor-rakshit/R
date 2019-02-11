@@ -205,11 +205,11 @@ ROUTES
 	 If no path specified in <Route /> , it will consider it as a default just like in c/cpp Switch case
 	 
 Transition into and Transition out
------------------------------------
+------------------------------------------
 Transition into  -->  Prevent to go to a restricted page which requires LOGIN.
 
 Transition out   -->  Prevent user to navigate , if mistakenly click on back arrow or other link , when formdata is modified
-                      use <Prompt /> REACT component for displaying confirmation 'message' and 'when' to show
+                      use <Prompt /> REACT component from 'react-router-dom' for displaying confirmation 'message' and 'when' to show
 
 
 

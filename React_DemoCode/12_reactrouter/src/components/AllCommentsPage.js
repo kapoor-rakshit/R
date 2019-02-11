@@ -4,6 +4,7 @@ import CommentList from './commentList';
 import CommentApi from '../data/CommentApi';
 
 export default class AllCommentsPage extends React.Component {
+  
     constructor(props) {
       super(props);
       this.state = {
