@@ -56,25 +56,41 @@ ANGULAR CLI also internally uses WEBPACK.
 
 To run webpack.config.js to create bundle command  ,  > webpack --mode=development
 
-module.exports = {
-entry: './src/main.js', 
+module.exports = {
+
+entry: './src/main.js',
+ 
 output: {
-	filename: 'bundle.js',
-	path: __dirname + '/dist'
-},  
-module: {
-	rules: [
+
+	filename: 'bundle.js',
+	path: __dirname + '/dist'
+
+},
+  
+module: {
+
+	rules: [
+
 		{
-		test: /\.js$/, 
-		exclude: /node_modules/, 
-		loader: 'babel-loader', 
-		options: {
+		
+test: /\.js$/,
+ 
+		exclude: /node_modules/,
+ 
+		loader: 'babel-loader',
+ 
+		options: {
+
 			presets: ['react']
 			}
-		}
-		]
-	}
-};
+
+		}
+		
+]
+	
+}
+
+};
 
 in "dist" dir we have a "bundle.js" created
 ---------------------------------------------
@@ -82,17 +98,23 @@ in "dist" dir we have a "bundle.js" created
 SUMMARY
 ========
 1) Go to Node.js Cmd Prompt and to proper directory.
-2) > webpack --mode=development -> Builds and create bundle.js in dist directory.
-3) > hs                          > or http-server -> Simple http server - Port 8080 , similar to "ng serve"
-4) Go to Google Chrome
-5) http://localhost:8080/
-6) Ctrl-Shift-J or F12   (JavaScript Console)
+
+2) > webpack --mode=development -> Builds and create bundle.js in dist directory.
+
+3) > hs                          > or http-server -> Simple http server - Port 8080 , similar to "ng serve"
+
+4) Go to Google Chrome
+
+5) http://localhost:8080/
+
+6) Ctrl-Shift-J or F12   (JavaScript Console)
 
 Working Flow
 -------------
  "index.html"       (specify css link, js script, bundle path to use)
  "dist/bundle.js"   (specify entry point of application ie  "main.js" )
- "REACT COMPONENTS" (components called as per their call hierarchy)
+ "REACT COMPONENTS" (components called as per their call hierarchy)
+
 
 
 Same ReactComponent can be used multiple times by nesting them all in a <div> ... </div>
@@ -171,27 +193,32 @@ PROPTYPES
 
 COMPONENT LIFECYCLE
 =====================
-INITIAL RENDER
-----------------
+MOUNTING
+--------
+  constructor()
+  render()
+  componentDidMount()
+
 - componentWillMount     -->   render   -->   componentDidMount
  (similar to ngOnInit)                     (AJAX calls , http requests can be made here)
  (set initial state)                       (Component's DOM exist)
 
-NOT INITIAL RENDER
--------------------
+UPDATING
+---------
+  render()
+  componentDidUpdate()
+
 - componentWillUpdate   -->   render   -->    componentDidUpdate
 
-REMOVE
--------
-- componentWillUnmount
-  (before component is removed from DOM , used for cleanup)
-
-PROPS
-------
 - componentWillReceiveProps
   (Similar to ngOnChanges)
   (Not initial render , called when props are changed , used to set state before render)
   (OUTER COMPONENT can pass values to INNER COMPONENT)
+
+UNMOUNTING
+-----------
+- componentWillUnmount()
+  (before component is removed from DOM , used for cleanup)
 
 
 
@@ -253,8 +280,10 @@ USE of LODASH
 
 BOOTSTRAP REFRENCE
 ===================
-https://reactstrap.github.io/
-https://react-bootstrap.github.io/getting-started/introduction
+
+https://reactstrap.github.io/
+
+https://react-bootstrap.github.io/getting-started/introduction
 https://reactjs.org/
 
 
@@ -279,5 +308,6 @@ CHECK package.json for these options
 
   npm run eject
     Removes this tool and copies build dependencies, configuration files
-    and scripts into the app directory. If you do this, you can’t go back!
+    and scripts into the app directory. If you do this, you canÂ’t go back!
+
 
