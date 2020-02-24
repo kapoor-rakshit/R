@@ -4,7 +4,7 @@ Need of REDUX
 - An architecture or principle just like FLUX.
 - Unidirectional Flow
 - ACTION triggers STATE change
-- STATE change happens in REDUCER while STORE maintains only CURRENT STATE, while in FLUX STATE change happens in STORES
+- STATE change happens in REDUCER while STORE maintains only CURRENT STATE, while in FLUX, STATE change happens in STORES
 - ROOT REDUCER has only DATA STRUCTURE , REDUCER have actual code
 - All ACTIONS go to all REDUCERS , in FLUX all ACTIONS go to all STORES
 - Do not have DISPATCHER
@@ -42,13 +42,6 @@ REDUX PRINCIPLES
 ---------------------------------------
 	Pure functions always return same value
 	PURE FUNCTIONS aka REDUCER accept ACTION and GET-UPDATE STATE.
-
-
-
-SPLIT OPERATOR
-===============
-... (three dots before an ARRAY, act as a split operator , and each element becomes individual stand)
-    Provides immutable CREATE, READ, UPDATE, DELETE
 
 
 
