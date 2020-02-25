@@ -1,19 +1,24 @@
 
 Need of REDUX
 ==============
-- An architecture or principle just like FLUX.
-- Unidirectional Flow
+- An architecture or principle just like FLUX , ie STATE MANAGEMENT.
+- Unidirectional data Flow
 - ACTION triggers STATE change
-- STATE change happens in REDUCER while STORE maintains only CURRENT STATE, while in FLUX, STATE change happens in STORES
-- ROOT REDUCER has only DATA STRUCTURE , REDUCER have actual code
-- All ACTIONS go to all REDUCERS , in FLUX all ACTIONS go to all STORES
-- Do not have DISPATCHER
+- STATE change happens in REDUCER while STORE maintains only CURRENT STATE, however in FLUX, STATE change happens in STORES
+- All ACTIONS go to all REDUCERS in a combined reducer, however in FLUX all ACTIONS go to all STORES.
+- ROOT REDUCER has only DATA STRUCTURE , REDUCER have actual code which always return new object and not mutate data/state.
+
+                          ---> ACTION
+			  |       |                     <---> REDUCER_1
+			  |    STORE <---> ROOT REDUCER <---> REDUCER_2
+			  |       |                     <---> REDUCER_3
+			  <-----VIEW
 
 - For complicated applications , but better to use in all applications.
 
 - REDUX maintains UI state:
 	1. Getting current state
-	2. Update state which is an ACTION
+	2. Update state via ACTION
 	
 	UI state includes
 	------------------
@@ -29,23 +34,106 @@ Need of REDUX
 
 REDUX PRINCIPLES
 =================
-
 - Single source of truth
 -------------------------
-	State of entire application stored in a single JavaScript object
+	State of entire application stored in a single JavaScript object which provides easier debugging.
 
 - State is READ-ONLY
 ----------------------
-	Cannot update state directly , but only possible via emitting an ACTION
-
-- Changes are made with pure functions
----------------------------------------
-	Pure functions always return same value
+	Cannot update state directly , but only possible via emitting an ACTION to a pure_function/reducer.
 	PURE FUNCTIONS aka REDUCER accept ACTION and GET-UPDATE STATE.
 
+- Changes are made with pure functions ie REDUCER
+---------------------------------------------------
+        Criteria for function to become PURE function ie REDUCER:
+	 - Pure functions always return same value if same args are passed.
+	 - It must only depend on its input arguments.
+	 - It does not change any data/state whether it depends on that data or not, during a program’s execution.
+	   However we can return state/arg with modification ie 'return state + 1' is VALID but 'state = state + 1' is INVALID.
+	
+	
+
+Installation + Setup 
+=========================
+> npm install -g --save redux
+> npm install -g webpack                          // webpack is required to create the JS bundle , include in index.html.
+  npm install -g webpack-cli                      // NOTE : webpack is not required for ANGULAR app as it will automatically bundle
+  webpack --mode=development
 
 
-METHODS of calling DISPATCH
-============================
+EXAMPLE
+=====================
+// 1.
+// single reducer
+--------------------------
+import {createStore} from 'redux';
+function REDUCER_FUNC_NAME(stateDATA=0, actionDATA) {                                        // REDUCER definition
+  switch (actionDATA.type) {
+    case 'INCREMENT':
+      return stateDATA + 1;
+    case 'DECREMENT':
+      return stateDATA - 1;
+    default:
+      return stateDATA;
+  }
+}
+function VIEW_FUNC_NAME() {
+  document.body.innerText = store.getState();                                                 // get current state
+}
+const store = createStore(<REDUCER_FUNC_NAME>);                                               // create STORE
+store.subscribe(<VIEW_FUNC_NAME>);                                                            // SUBSCRIBE for any change to store
+store.dispatch({ type: 'INCREMENT', id: 1, name: 'Ram', location: 'Bangalore' });             // ACTION payload/data
+store.dispatch({ type: 'DECREMENT', id: 2, name: 'Vinay', location: 'Chennai' });
+
+// 2.
+// multiple reducers, use ROOT REDUCER
+-------------------------------------------
+import {createStore, combineReducers} from 'redux';
+function REDUCER_FUNC_NAME_1(stateDATA=[], actionDATA) {              // REDUCER 1
+  switch (actionDATA.type) {
+    case 'ADD_USER':    
+      return [
+          ...stateDATA,                                  // immutable way of accessing stateDATA, using ... (split operator)
+          {
+            id: actionDATA.id,
+            name: actionDATA.name,
+            location: actionDATA.location
+          }
+        ];
+    case 'ADD_CUSTOMER':                                 // to demonstrate that each action dispatch goes to all reducers
+      console.log(`${stateDATA} , a dummy call`);
+      return;
+    default:
+      return stateDATA;
+  }
+}
+function REDUCER_FUNC_NAME_2(stateDATA=[], actionDATA) {               // REDUCER 2
+  switch (actionDATA.type) {
+    case 'ADD_CUSTOMER':
+      return [
+          {
+            custid: actionDATA.custid,
+            custname: actionDATA.custname,
+          }
+        ];
+    case 'ADD_USER':
+      console.log("ADD_USER, a dummy call");
+      return;
+    default:
+      return stateDATA;
+  }
+}
+function VIEW_FUNC_NAME() {
+  document.body.innerText = store.getState();                                                 // get current state
+}
+const rootReducer = combineReducers({                                                         // create ROOT REDUCER
+  <REDUCER_FUNC_NAME_1>,                                                                          // REDUCER 1
+  <REDUCER_FUNC_NAME_2>                                                                           // REDUCER 2
+});
+var store = createStore(rootReducer);                                                         // create STORE
+store.subscribe(<VIEW_FUNC_NAME>);                                                            // SUBSCRIBE for any change to store
+store.dispatch({ type: 'ADD_USER', id: 1, name: 'Ram', location: 'Bangalore' });              // ACTION payload/data
+store.dispatch({ type: 'ADD_USER', id: 2, name: 'Vinay', location: 'Chennai' });                 // it will trigger all reducers
+store.dispatch({ type: 'ADD_CUSTOMER', custname: 'Citibank' });                                  // order of being triggered is non deterministic
 
 
