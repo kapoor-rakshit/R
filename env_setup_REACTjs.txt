@@ -5,27 +5,32 @@ For SetupInstructions REFER : "SetupInstructions.docx"
 If "node_modules" is not found under cur dir of project, it will move to parent dir, if still not parent dir....
 
 
+In Traditional app, Client side only understands HTML, full load is on web server
+In SPA, only index.html is loaded from web server, all JS, CSS is downloaded and kept ready on client side (browser).
+
+
+ANGULAR vs REACT
+=========================
 -ANGULAR is a FRAMEWORK ,      REACT is a UI LIBRARY which requires different packages to work with for complete application
 -ANGULAR is HTML centric ,     REACT is JS centric
 -ANGULAR is backed by GOOGLE , REACT is backed by FACEBOOK
 -both differs in their internal architecture.
 
 
+REAL DOM vs VIRTUAL DOM
+============================
+DO NOT USE JQuery DOM   or  JAVASCRIPT DOM API directly as they work on (REAL DOM) BROWSER DOM which makes application slower.
+Instead use REACT DOM API which will use VIRTUAL DOM.
+VIRTUAL DOM is a JS Object, an in memory representation of of REAL DOM (BROWSER DOM), which are faster than DOM Objects.
+REACT DOM API never reads from REAL DOM.
+Any changes do happen in VIRTUAL DOM only, React then compares VIRTUAL and REAL DOM and only make difference in two to be implemented in REAL DOM.
 
-DO NOT USE JQuery DOM   or  JAVASCRIPT DOM API directly as they work on BROWSER DOM which makes application slower.
-Instead use REACT API way which will use VIRTUAL DOM.
-VIRTUAL DOM is a JS Object.
-Reading and Writing JS Objects are faster than DOM Objects.
-React never reads from real DOM and writes to it only when required.
 
-
-
+JSX | BABEL
+====================
 JSX is a static HTML + dynamic stuff
-JSX is XML like syntax JavaScript provided by REACT.
-
-
-BABEL makes conversion of JSX to HTML possible as browser understand only HTML.
-
+JSX is XML like syntax JavaScript, that is provided by REACT.
+BABEL makes conversion of JSX to HTML and JS possible as browser understands only HTML and JS.
 
 REACT creates a VIRTUAL DOM within <script type="text/babel"> ... </script> tag.
 This type attribute of <script> specifies to BABEL that take JSX and convert to HTML.
@@ -38,19 +43,27 @@ EVERY REACT component must have a "render" method.
 ".createClass" provides JSX syntax for rendering elements ie "what to render", stored in a variable "ReactComponent" (NOTE: REACT vars are in UpperCase)
 
 
-in "main.js" file under "src" dir
---------------------------------------
-- IMPORT statements
-- ComponentClass extends React.Component  , provides "what to render"
+PROJECT STRUCTURE
+=======================
+"package.json"
+------------------
+- "name" | "dependencies" | "scripts"
 
-
-in "index.html" file
------------------------
+"index.html"
+------------------
 - <div id="cont"></div>                    ,  provides "where to render"
 - <script src="./dist/bundle.js"></script> ,  take all JS from all dirs in cur dir and bundle it to a bundle called bundle.js
 
+"index.js"
+------------------
+- IMPORT statements
+- ComponentClass extends React.Component  , provides "what to render"
 
-in "webpack.config.js" file to CREATE a BUNDLE.js
+"App.js"
+------------------
+
+
+"webpack.config.js" file to CREATE a BUNDLE.js
 ---------------------------------------------------
 ANGULAR CLI also internally uses WEBPACK.
 
