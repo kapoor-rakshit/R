@@ -28,6 +28,7 @@ Any changes do happen in VIRTUAL DOM only, React then compares VIRTUAL and REAL 
 
 JSX | BABEL
 ====================
+JSX is Javascript extension, it looks like HTML but is not actually HTML.
 JSX is a static HTML + dynamic stuff
 JSX is XML like syntax JavaScript, that is provided by REACT.
 BABEL makes conversion of JSX to HTML and JS possible as browser understands only HTML and JS.
@@ -43,6 +44,7 @@ EVERY REACT component must have a "render" method.
 ".createClass" provides JSX syntax for rendering elements ie "what to render", stored in a variable "ReactComponent" (NOTE: REACT vars are in UpperCase)
 
 
+
 PROJECT STRUCTURE
 =======================
 "package.json"
@@ -51,156 +53,327 @@ PROJECT STRUCTURE
 
 "index.html"
 ------------------
+- located inside  'public'  dir
 - <div id="cont"></div>                    ,  provides "where to render"
 - <script src="./dist/bundle.js"></script> ,  take all JS from all dirs in cur dir and bundle it to a bundle called bundle.js
 
 "index.js"
 ------------------
+- located inside  'src'  dir
 - IMPORT statements
-- ComponentClass extends React.Component  , provides "what to render"
+- .render(WhatToRender , WhereToRender)
+   ReactDOM.render(
+   <React.StrictMode>
+     <App />
+   </React.StrictMode>,  document.getElementById('root'));
 
-"App.js"
-------------------
+"index.css"
+----------------------------------------------------
+- located inside  'src'  dir
+- similar to global `styles.css` in angular
 
+"App.js" , "App.css"
+----------------------
+- located inside  'src'  dir
+- Similar to `AppComponent` in angular
 
 "webpack.config.js" file to CREATE a BUNDLE.js
 ---------------------------------------------------
 ANGULAR CLI also internally uses WEBPACK.
-
 To run webpack.config.js to create bundle command  ,  > webpack --mode=development
-
 module.exports = {
-
 entry: './src/main.js',
- 
 output: {
-
 	filename: 'bundle.js',
 	path: __dirname + '/dist'
-
-},
-  
+}, 
 module: {
-
 	rules: [
-
-		{
-		
-test: /\.js$/,
- 
+		{		
+		test: /\.js$/,
 		exclude: /node_modules/,
- 
 		loader: 'babel-loader',
- 
 		options: {
-
 			presets: ['react']
-			}
-
 		}
-		
-]
-	
+		}		
+	]
 }
-
 };
 
 in "dist" dir we have a "bundle.js" created
 ---------------------------------------------
 
+
 SUMMARY
-========
+==========
 1) Go to Node.js Cmd Prompt and to proper directory.
-
 2) > webpack --mode=development -> Builds and create bundle.js in dist directory.
-
 3) > hs                          > or http-server -> Simple http server - Port 8080 , similar to "ng serve"
-
 4) Go to Google Chrome
-
 5) http://localhost:8080/
-
 6) Ctrl-Shift-J or F12   (JavaScript Console)
 
 Working Flow
--------------
+--------------
  "index.html"       (specify css link, js script, bundle path to use)
  "dist/bundle.js"   (specify entry point of application ie  "main.js" )
  "REACT COMPONENTS" (components called as per their call hierarchy)
 
 
 
-Same ReactComponent can be used multiple times by nesting them all in a <div> ... </div>
-if required to be rendered to same place.
+Creating react components
+============================
+/* 1. CLASS  - React component */
+import React from 'react';
+export default class App extends React.Component {
+	render() {
+		return (
+			<>
+			<h1>Welcome to React!</h1>
+			</>
+		);
+	}
+}
+
+/* 2. FUNCTIONAL - React  component */
+import React from 'react';
+function App() {
+	return (
+		<>
+		<h1>Welcome to React!</h1>
+		</>
+	);
+}
+export default App;
+
+/* 3. FUNCTIONAL using Arrow notation - React component  */
+import React from 'react';
+const App = () => {
+	return (
+		<>
+		<h1>Welcome to React!</h1>
+		</>
+	);
+}
+export default App;
+
+
+Component Reuse + Interpolation + PropertyBinding
+===================================================
+/* Similar to using component DIRECTIVE as used with child components in angular */
+/* when reusing components , enclose them within a <div>...</div>  tag OR <React.Fragment>...</React.Fragment> OR <>...</> */
+import React from 'react';
+import ChildComp1 from './Childcomp_1';
+import ChildComp2 from './Childcomp_2';
+function App() {
+	let i = 6;
+	let logo = "<PATH_TO_IMAGE>";
+	return (
+		<p>{i * 5 + 7}</p>                                            // Interpolation, NOTE: use of single { }
+		<img src={logo} className="App-logo" alt="logo" />            // Property Binding
+		<React.Fragment>
+			<ChildComp1/><ChildComp2/>
+		</React.Fragment>
+	);
+}
+export default App;
 
 
 
 PROPERTIES (props)
 ===================
-REACT components can be made dynamic by adding PROPERTIES to them.
-  - JSX value of PROPERTIES should be either an expression ( {  } ) or a quoted ( "  " ) JSX text
-Just like attributes are added to HTML tags.
-- PROPERTIES are immutable and can only be read from COMPONENT not modified.
-- constructor(props) { super(props); }
-- any variable is accessed using { }
-- { this.props.COMPONENT_VARIABLE }         // access property using keyword "props"
-- { this.props.children }                   // access children of REACT COMPONENT  ie  <ReactComponent> CHILDREN </ReactComponent>
+/* Similar to `@Input` concept in angular */
+/* Properties are immutable i.e. we cannot assign props a value,   this.props.os = "Linux"; */
+/* defaultProps can be used in absence of actual parameter values to be passed */
+/* propTypes will get removed from production build of the application */
+   /* Used only in developmental integration testing */
+import React from 'react';
+import PropTypes from 'prop-types';
+import ChildComp1 from './Childcomp_1';
+import ChildComp2 from './Childcomp_2';
+ChildComp1.defaultProps = { VAR_1 : "JRK ji" };
+ChildComp2.defaultProps = { VAR_1 : "Kapoor",  VAR_2 : ["ASR"] };
+ChildComp2.propTypes = { VAR_1(props, propName) {
+				if (typeof props[propName] !== "number") { return new Error("Age must be a number"); }
+				if (props[propName] > 100) { return new Error("Age entered is " + props[propName] + ", it should be less than or equal to 100"); }
+			 },
+			 VAR_2 : PropTypes.array.isRequired
+};
+function App() {
+	return (
+		<React.Fragment>
+			<ChildComp1 VAR_1={"Hardcoded_Val"}>CHILDREN_1</ChildComp1>
+			<ChildComp2 VAR_1={Dynamic_Val} VAR_2={["JRK", "ASR"]}>CHILDREN_2</ChildComp2>
+		</React.Fragment>
+	);
+}
+export default App;
+
+/* Childcomp_1 as FUNCTIONAL component */
+/* NOTE : use of   'props'   (not a keyword, still good to write arg as is) as arg to function */
+import React from 'react';
+function ChildComp1(props) {
+	return (
+		<>
+		<h1>Operating System: {props.VAR_1}</h1>              // "Hardcoded_Val"
+		<h3>Developed by {props.children}</h3>                // '.children' keyword gives content within childcomp tag, example : CHILDREN_1
+		</>
+	);
+}
+export default ChildComp1;
+
+/* Childcomp_2 as CLASS component */
+/* NOTE : Use of   'this'  keyword */
+import React from 'react';
+class ChildComp2 extends React.Component {
+	render() {
+		return (
+			<>
+			<h1>Operating System: {this.props.VAR_1}</h1>     // Dynamic_Var_Value
+			<h1>Operating System: {this.props.VAR_2}</h1>     // Array object
+			<h3>Developed by {this.props.children}</h3>       // CHILDREN_2
+			</>
+		);
+	}
+}
+export default ChildComp2;
 
 
 
 EVENT HANDLING
 ===============
-- Same events as of HTML , but with NAMING CONVENTION of camelCase (eg:- onClick = {this.func1} )
-  NOTE : Here we have not added () ie this.func1() as in HTML because it will call the func everytime COMPONENT loads.
-- constructor(props) { 
-	super(props); 
-	this.func1VAR = this.func1.bind(this);              // bind functions to function vars
-	this.func2VAR = this.func2.bind(this);
-	this.func3VAR = this.func3.bind(this);
+/* NOTE : Same events as of HTML , but with NAMING CONVENTION of camelCase for event handlers   onClick, onFocus, onBlur, onChange, onInput
+	: Here we have not added () ie this.func1() because it will call the func everytime COMPONENT loads.
+*/
+/* 1. FUNCTIONAL component */
+/* NOTE : Use 'function' keyword when defining functions */
+/*      : Do not use 'this' keyword to access functions */
+import React from 'react';
+function ChildComp(props) {
+	function handleText(et) {
+		console.log(et.target.value);
+	}    
+	function add() {        
+		console.log('Add clicked');    
 	}
-- onClick , onChange , defaultChecked, onInput
+	function update(evt) {
+		console.log(`${evt.target}`);
+		console.log(`Update Clicked`);
+	}
+	return (
+		<>
+		<input type="text" onInput={(evt) => handleText(evt)}/>
+		<button onClick={() => add()}>Add</button>
+		<button onClick={update}>Update</button>
+		</>
+	);
+}
+export default ChildComp;
+
+/* 2. CLASS component */
+/* NOTE : Do not use 'function' keyword when defining functions */
+/*      : Use 'this' keyword to access functions */
+import React from 'react';
+class ChildComp extends React.Component {
+	handleText(et) {    
+		console.log(et.target.value);    
+	}    
+	add() {        
+		console.log('Add clicked');    
+	}
+	update(evt) {
+		console.log(`${evt.target}`);
+		console.log(`Update Clicked`);
+	}
+	render() {
+	  return (
+	  	<>
+		<input type="text" onInput={(evt) => this.handleText(evt)}/>
+		<button onClick={() => this.add()}>Add</button>
+		<button onClick={this.update}>Update</button>
+		</>
+	  );
+	}
+}
+export default ChildComp;
 
 
 
-STATES
-=======
-- Provide a way to update VIRTUAL DOM and then compare to BROWSER DOM.
-  This makes it fast as to only update the content changed and not the entire data.
-- constructor(props){
-	this.state = {                                // a JSON inside constructor for init values of vars , with keyword .state
-	   checkedVAR: false,
-                   VAR2: true
- 	};
-  }
-- this.setState( { checked: !this.state.checked } )  // modify values in JSON , with keyword .setState
-
-
-
-REFS
-=====
-- Useful in FORMS
-- < input ref="VARNAME" >         //        use ref as an identifier
-- this.refs.VARNAME.value         // NOTE : use of refs , as there can be multiple fields (refs)
-
-
-
-PROPTYPES
-==========
-- Useful in DEVELOPMENT phase for validation.
-- ReactComponent.propTypes = {                                 // check over Props
-		name: PropTypes.string.isRequired,
-		skills: PropTypes.array,
-		age(props, propName){                // first arg is array of all PROPS and second arg is current PROP ie age here
-			if(props[propName] > 100){
-				return new Error("");
-			}
+State (Controlled Components)
+==============================
+/* managing data using STATE */
+/* When STATE changes, REACT compares virtual DOM to real DOM for change to take effect */    
+   /* - Server responses , data that gets displayed on browser.         
+      - Cached or buffered data.        
+      - Computed or temporary data.        
+      - UI controls like disabled button , selected tab , active route.    
+   */
+/* use `setState()` method to update STATE */
+/* To update STATE using a previous value of STATE, make use of function inside setState */
+import React from 'react';
+export default class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			empname: 'Ram',
+			bManager: false
+		};
+	}
+	handleTextChange(e) {
+		this.setState({ empname: e.target.value });
+	}
+		/* === Wrong way for setting state based on previous state value === */
+		/*
+		handleCheckbox() {
+			this.setState({bManager: !this.state.bManager});
 		}
-	 };
-- ReactComponent.defaultProps = {                            // default values defined if in absence of parameters passed to ReactComponent
-		name: "RA20024024",
-		age: 56
-	};
-- REACT will remove propTypes automatically in PRODUCTION build which are entered in DEVELOPMENT.
+		*/
+	/* Correct way for setting state based on previous state value = Through Arrow function */
+	handleCheckbox() {
+		this.setState((prevState) => {      
+				return ({ bManager: !prevState.bManager })    
+			       }
+		);
+	}
+	render() {
+		let role = this.state.bManager ? " Manager" : " Employee";
+		return (
+			<>
+			<input type="text" value={this.state.empname} onChange={(e) => this.handleTextChange(e)} />
+			<input type="checkbox" checked={this.state.bManager} onChange={() => this.handleCheckbox()} />
+			<p>{this.state.empname} is {role}</p>
+			</>
+		);
+	}
+}
+
+Ref (Uncontrolled Components)
+===============================
+/* This is same as ElementRef in angular */
+import React from 'react';
+export default class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.refName = React.createRef();
+		this.refLocation = React.createRef();
+	}
+	handleSubmit() {
+		let name = this.refName.current.value;
+		let location = this.refLocation.current.value;
+		console.log(`Name = ${name}, Location = ${location}`);
+		this.refName.current.focus();
+	}
+	render() {
+		return (
+			<>
+			<label>Enter your name:<input type="text" ref={this.refName} /><br/><br/></label>
+			<label>Enter your location:<input type="text" ref={this.refLocation} /><br/><br/></label>
+			<button onClick={() => this.handleSubmit()}>Submit</button>
+			</>
+		);
+	}
+}
 
 
 
