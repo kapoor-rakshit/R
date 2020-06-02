@@ -377,34 +377,27 @@ export default class App extends React.Component {
 
 
 
-COMPONENT LIFECYCLE
-=====================
-MOUNTING
---------
-  constructor()
-  render()
-  componentDidMount()
+Component Lifecycle
+======================
+- constructor() {}
 
-- componentWillMount     -->   render   -->   componentDidMount
- (similar to ngOnInit)                     (AJAX calls , http requests can be made here)
- (set initial state)                       (Component's DOM exist)
+- render() {}
+/* Mandatory  to be implemented in ES2015 class components */
+/* It returns the DOM to be rendered */
+/* React achieves fast and responsive UI by re-rendering components on every state change (using .setState) or from changes of props */
 
-UPDATING
----------
-  render()
-  componentDidUpdate()
+- componentDidMount() {}
+/* similar to ngOninit() in angular */
+/* Called after initial render() , only once when component's DOM exists */
+/* We should make network HTTP GET request here ( not in constructor() ) to retrieve data , then call this.setState() method to re-render component */
 
-- componentWillUpdate   -->   render   -->    componentDidUpdate
+- componentDidUpdate() {}
+/* Not called on initial render() */
+/* Called after every component's updates are flushed to DOM i.e. on every re-render i.e. on every state change (using .setState) or from changes of props */
 
-- componentWillReceiveProps
-  (Similar to ngOnChanges)
-  (Not initial render , called when props are changed , used to set state before render)
-  (OUTER COMPONENT can pass values to INNER COMPONENT)
-
-UNMOUNTING
------------
-- componentWillUnmount()
-  (before component is removed from DOM , used for cleanup)
+- componentWillUnmount() {}
+/* similar to ngOnDestroy() */
+/* Called when component is to be destroyed */
 
 
 
@@ -464,13 +457,20 @@ USE of LODASH
 
 
 
-BOOTSTRAP REFRENCE
-===================
+React-Bootstrap
+====================
+> npm install react-bootstrap bootstrap
 
-https://reactstrap.github.io/
+index.js
+-------------
+/* include this before other CSS imports for local styles to get preference over default bootstrap styles */
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-https://react-bootstrap.github.io/getting-started/introduction
-https://reactjs.org/
+COMPONENT.js
+----------------
+import Button from 'react-bootstrap/Button';
+import './COMPONENT.css';
+<Button variant="danger" onClick={(evt) => this.decCounter(evt)}>Decrement Counter</Button>
 
 
 
