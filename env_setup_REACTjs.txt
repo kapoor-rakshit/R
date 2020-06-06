@@ -45,6 +45,29 @@ EVERY REACT component must have a "render" method.
 
 
 
+NEW PROJECT using tool
+=======================
+- npm install -g create-react-app
+- create-react-app APPNAME
+
+CHECK package.json for these options
+======================================
+  npm start
+    Starts the development server.
+    similar to "ng serve"
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you cant go back!
+
+
+
 PROJECT STRUCTURE
 =======================
 "package.json"
@@ -387,8 +410,9 @@ Component Lifecycle
 /* React achieves fast and responsive UI by re-rendering components on every state change (using .setState) or from changes of props */
 
 - componentDidMount() {}
-/* similar to ngOninit() in angular */
+/* similar to ngOninit()/ngAfterViewInit() in angular */
 /* Called after initial render() , only once when component's DOM exists */
+/* We should attach Event Handlers here , as DOM is initially rendered completely */
 /* We should make network HTTP GET request here ( not in constructor() ) to retrieve data , then call this.setState() method to re-render component */
 
 - componentDidUpdate() {}
@@ -472,28 +496,5 @@ import Button from 'react-bootstrap/Button';
 import './COMPONENT.css';
 <Button variant="danger" onClick={(evt) => this.decCounter(evt)}>Decrement Counter</Button>
 
-
-
-NEW PROJECT using tool
-=======================
-- npm install -g create-react-app
-- create-react-app APPNAME
-
-CHECK package.json for these options
-======================================
-
-  npm start
-    Starts the development server.
-    similar to "ng serve"
-
-  npm run build
-    Bundles the app into static files for production.
-
-  npm test
-    Starts the test runner.
-
-  npm run eject
-    Removes this tool and copies build dependencies, configuration files
-    and scripts into the app directory. If you do this, you cant go back!
 
 
