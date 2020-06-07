@@ -65,6 +65,22 @@ CHECK package.json for these options
   npm run eject
     Removes this tool and copies build dependencies, configuration files
     and scripts into the app directory. If you do this, you cant go back!
+    
+    
+npm start
+============
+/* To run react application on a different port , there are two ways */
+/*1 */
+/* set ENV PORT in package.json */
+   "start": "set PORT=4000 && react-scripts start"                                 
+      OR
+/*2*/
+/* set PORT in `node_modules/react-scripts/scripts/start.js` */
+   const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 4000;
+
+
+/* To prevent browser from opening on npm start , comment a line in `node_modules/react-scripts/scripts/start.js` */ 
+   //openBrowser(urls.localUrlForBrowser);
 
 
 
@@ -425,6 +441,218 @@ Component Lifecycle
 
 
 
+COMPOSABLE COMPONENTS   (similar to *ngFor in angular)
+========================
+/* 1. AllCommentsPage.js */
+import React from "react";
+import CommentList from "./CommentList";
+import CommentApi from "../data/CommentApi";
+export default class AllCommentsPage extends React.Component {    
+   constructor(props) {
+      super(props);
+      this.state = {
+         comments: []
+      };
+   }    
+   componentDidMount() {
+      this.setState({ comments: CommentApi.getAllComments() });    
+   }    
+   render() {
+      return (            
+         <>                
+	 <h1>Comments</h1>                
+	 <CommentList comments={this.state.comments} />            
+	 </>        
+      );    
+   }
+}
+
+/* 2. CommentList.js */
+/* Instead of <Comment> component , it can be a simple HTML tag too */
+/* `key` is a reserved ReactJS keyword whose value is unique , to uniquely identify each component amongst composable components */
+import React from 'react';
+import Comment from './Comment';
+export default class CommentList extends React.Component {  
+   render () {
+      let commentNodes = this.props.comments.map((comment) => {
+         return (
+	    <Comment key={comment.id} author={comment.author}> 
+	       {comment.text} 
+	    </Comment>    
+	 );
+      });    
+      return (      
+         <>        
+         <table>          
+            <thead>            
+	       <tr>              
+	          <th>Author</th>              
+		  <th>Comment</th>            
+	       </tr>          
+	    </thead>          
+	    <tbody>            
+	       {commentNodes}          
+	    </tbody>        
+	 </table>      
+	 </>    
+      );  
+   }
+}
+
+/* 3.  Comment.js */
+import React from 'react';export default class Comment extends React.Component {  
+   render() {    
+      return (    
+         <>
+         <tr>          
+	    <td>{this.props.author}</td>          
+	    <td>{this.props.children}</td>        
+	 </tr> 
+	 </>
+      );  
+   }
+}
+
+
+
+HTTP SERVICE using AXIOS
+===========================
+>  npm install axios
+/* REFERENCE : https://github.com/axios/axios */
+/* It is a Promise based HTTP client lib for browser and node.js */
+/* Provides API for HTTP verbs , similar to HTTPClientModule in angular */
+
+GET REQUEST
+----------------
+axios.get('/user', {
+    params: {               // query params
+      ID: 12345
+    }
+  })
+  .then((response) => {
+    console.log(response);  // handle success
+  })
+  .catch((error) => {
+    console.log(error);     // handle error
+  })
+  .then(() => {
+    console.log(`API CALL COMPLETED`);      // always executed similar to 'finally'
+  });
+  
+POST REQUEST
+-----------------
+axios.post('/user', {
+    firstName: 'Fred',                      // POST req BODY
+    lastName: 'Flintstone'
+  })
+  .then((response) => {
+    console.log(response);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+  .then(() => {  
+    console.log(`API CALL COMPLETED`);     // always executed similar to 'finally'
+  });
+  
+RESPONSE for a request contains the following information
+--------------------------------------------------------------
+{
+  // `data` is the response BODY that was provided by the server
+  data: {},
+
+  // `status` is the HTTP status code from the server response
+  status: 200,
+
+  // `statusText` is the HTTP status message from the server response
+  statusText: 'OK',
+
+  // `headers` the HTTP headers that the server responded with
+  // All header names are lower cased and can be accessed using the bracket notation.
+  // Example: `response.headers['content-type']`
+  headers: {},
+
+  // `config` is the config that was provided to `axios` for the request
+  config: {},
+
+  // `request` is the request that generated this response
+  // It is the last ClientRequest instance in node.js (in redirects)
+  // and an XMLHttpRequest instance in the browser
+  request: {}
+}
+
+Handling Errors
+------------------
+axios.get('/user/12345')
+  .catch((error) => {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+      throw error;
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+      throw error;
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+      console.log(error.config);
+      throw error;
+    }
+  });
+
+/* EXAMPLE: .service.js */
+import axios from 'axios';
+export default class CommentApi {
+   static getAllComments(cbFn) {
+      axios.get('http://localhost:3000/comments')
+           .then((response) => {
+	      return cbFn(response.data);
+	    })
+	   .catch((error) => { 
+	      throw error;
+	    })
+	    .then(() => {
+	       console.log(`API CALL COMPLETED`);
+	    });
+   }
+}
+
+/* EXAMPLE:  .comp.js */
+import React from 'react';
+import CommentList from './CommentList';
+import CommentApi from '../data/CommentApi';
+export default class AllCommentsPage extends React.Component {    
+   constructor(props) {      
+      super(props);      
+      this.state = {        
+         comments: []      
+      };    
+   }    
+   componentDidMount() {      
+      CommentApi.getAllComments((resDATA) => { 
+         this.setState((prevState) => {
+	    return {comments: [...prevState.comments, ...resDATA]}
+	 });  
+      });
+   }    
+   render() {      
+      return (        
+         <>            
+	 <h1>Comments</h1>            
+	 <CommentList comments={this.state.comments} />        
+	 </>      
+      );    
+   }
+}
+
+
+
 ROUTES
 =======
  Use of  "axios"  in  place  of     http
@@ -476,11 +704,6 @@ IT HAS A DEFINED DIR STRUCTURE
 
 
 
-USE of LODASH
-==============
-
-
-
 React-Bootstrap
 ====================
 > npm install react-bootstrap bootstrap
@@ -495,6 +718,20 @@ COMPONENT.js
 import Button from 'react-bootstrap/Button';
 import './COMPONENT.css';
 <Button variant="danger" onClick={(evt) => this.decCounter(evt)}>Decrement Counter</Button>
+
+
+STYLE
+=========== 
+NOTE : 'className' attr is used and not 'class' attr is used in HTML tags for CSS because 'class' is a reserved JS keyword.
+	example:
+		<div className={`CLASS_NAME_1 CLASS_NAME_2`}>  ...  </div>
+	
+- Conditional assignment of CSS Classes
+  Here CLASS_NAME_1 , CLASS_NAME_2 are always applied on DIV , however CLASS_1 and CLASS_2 are applied or toggled accordingly.
+  example:
+  	  <div className={`CLASS_NAME_1 CLASS_NAME_2 ${this.state.VAR1 ? "CLASS_1" : ""} ${this.state.VAR2 == "VAL" ? "CLASS_1" : "CLASS_2"}`}>
+	  ...
+	  </div>
 
 
 
