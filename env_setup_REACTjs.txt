@@ -1,4 +1,4 @@
-
+﻿
 For SetupInstructions REFER : "SetupInstructions.docx"
 
 
@@ -469,7 +469,7 @@ export default class AllCommentsPage extends React.Component {   
 
 /* 2. CommentList.js */
 /* Instead of <Comment> component , it can be a simple HTML tag too */
-/* `key` is a reserved ReactJS keyword whose value is unique , to uniquely identify each component amongst composable components */
+/* `key` is a mandatory reserved ReactJS keyword whose value is unique , to uniquely identify each component amongst composable components */
 import React from 'react';
 import Comment from './Comment';
 export default class CommentList extends React.Component {  
@@ -500,7 +500,8 @@ export default class CommentList extends React.Component { 
 }
 
 /* 3.  Comment.js */
-import React from 'react';export default class Comment extends React.Component {  
+import React from 'react';
+export default class Comment extends React.Component {  
    render() {    
       return (    
          <>
@@ -515,6 +516,235 @@ import React from 'react';export default class Comment extends React.Component {
 
 
 
+HIGHER ORDER COMPONENTS    |    RENDER PROPS
+============================================
+/* They are used for rendering common portion of components implementation */
+/* HIGHER ORDER COMPONENTS (HOC) */
+/* It use a function ( example : withItem() ) that takes a component as parameter and returns a new component */
+/* 1. App.js */
+import React, { Component } from 'react';
+import EmployeeListHOC from './components/EmployeeList';
+import CustomerListHOC from './components/CustomerList';
+class App extends Component {
+    render() {
+        return (
+            <>
+                <EmployeeListHOC heading="Employee List (Higher Order Component)"/>
+                <CustomerListHOC heading="Customer List (Higher Order Component)"/>
+            </>
+        )
+    }
+}
+export default App;
+
+/* 2. withItem.js */
+import React, { Component } from 'react';
+const withItem = (WrappedComponent, toUpper) => {
+    class WithItem extends Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                itemInputted: '',
+                items: []
+            }
+        }
+        handleItemInput = (e) => {
+            this.setState({itemInputted: e.target.value})
+        }
+        addItem = (itemName) => {
+            this.setState(prevState => {
+                return { items: [...prevState.items, toUpper ? itemName.toUpperCase() : itemName] };
+            })
+        }
+        render() {
+            return (
+                <WrappedComponent
+                    itemInputted={this.state.itemInputted}
+                    handleItemInput={this.handleItemInput}
+                    items={this.state.items}
+                    addItem={this.addItem}
+                    {...this.props} />                                          // destructuring props , passed from parent component , here `App.js`
+            )
+        }
+    }
+    return WithItem;
+}
+export default withItem;
+
+/* 3. EmployeeList.js */
+import React, { Component } from 'react';
+import withItem from './withItem';
+class EmployeeList extends Component {
+    render() {
+        const { itemInputted, handleItemInput, items, addItem } = this.props; // DESTRUCTURING - ES2015 concept
+        let itemList = items.map((item, index) => (
+            <li key={index}>{item}</li>
+        ))
+        return (
+            <>
+                <h2>{this.props.heading}</h2>
+                <label>
+                    Enter employee name:
+                    <input type="text" value={itemInputted} onChange={(e) => handleItemInput(e)} />
+                </label>
+                <button onClick={() => addItem(itemInputted)}>Add Employee (HOC)</button>
+                <ul>
+                    {itemList}
+                </ul>
+            </>
+        )
+    }
+}
+// Arguments can be passed accordingly to withItem function that handle common code for different components.
+// here `true` is passed to store name as uppercase
+export default withItem(EmployeeList, true);
+
+/* 4. CustomerList.js */
+import React, { Component } from 'react';
+import withItem from './withItem';
+class CustomerList extends Component {
+    render() {
+        const { itemInputted, handleItemInput, items, addItem } = this.props;  // DESTRUCTURING - ES2015 concept
+        let itemList = items.map((item, index) => (
+            <li key={index}>{item}</li>
+        ))
+        return (
+            <>
+                <h2>{this.props.heading}</h2>
+                <label>
+                    Enter customer name:
+                    <input type="text" value={itemInputted} onChange={(e) => handleItemInput(e)} />
+                </label>
+                <button onClick={() => addItem(itemInputted)}>Add Customer (HOC)</button>
+                <ul>
+                    {itemList}
+                </ul>
+            </>
+        )
+    }
+}
+// Arguments can be passed accordingly to withItem function that handle common code for different components.
+// here `false` is passed to store name as uppercase
+export default withItem(CustomerList, false);
+
+
+/* RENDER PROPS */
+/* A render prop is where a components prop is assigned a function and this is called in render() method of component */
+/* 1. App.js */
+import React, { Component } from 'react';
+import Item from './components/Item';
+import EmployeeList from './components/EmployeeList';
+import CustomerList from './components/CustomerList';
+class App extends Component {
+    render() {
+        return (
+            <>
+                <Item isUpper={true}>
+                    {(itemInputted, handleItemInput, items, addItem) => (
+                        <EmployeeList 
+                            itemInputted={itemInputted}
+                            handleItemInput={handleItemInput}
+                            items={items}
+                            addItem={addItem}
+                            heading="Employee List (Using Render Props)" />
+                    )}
+                </Item>
+                <Item>
+                    {(itemInputted, handleItemInput, items, addItem) => (
+                        <CustomerList
+                            itemInputted={itemInputted}
+                            handleItemInput={handleItemInput}
+                            items={items}
+                            addItem={addItem}
+                            heading="Customer List (Using Render Props)" />
+                    )}
+                </Item>
+            </>
+        )
+    }
+}
+export default App;
+
+/* 2. Item.js */
+import React, { Component } from 'react';
+class Item extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            itemInputted: '',
+            items: []
+        }
+    }
+    handleItemInput = (e) => {
+        this.setState({itemInputted: e.target.value})
+    }
+    addItem = (itemName) => {
+        this.setState(prevState => {
+            return { items: [...prevState.items, this.props.isUpper ? itemName.toUpperCase() : itemName] };
+        })
+    }
+    render() {
+        return (
+            <div>
+                {this.props.children(this.state.itemInputted, this.handleItemInput, this.state.items, this.addItem)}
+            </div>
+        )
+    }
+}
+export default Item;
+
+/* 3. EmployeeList.js */
+import React, { Component } from 'react';
+class EmployeeList extends Component {
+    render() {
+        const { itemInputted, handleItemInput, items, addItem } = this.props;
+        let itemList = items.map((item, index) => (
+            <li key={index}>{item}</li>
+        ))
+        return (
+            <>
+                <h2>{this.props.heading}</h2>
+                <label>
+                    Enter employee name:
+                    <input type="text" value={itemInputted} onChange={(e) => handleItemInput(e)} />
+                </label>
+                <button onClick={() => addItem(itemInputted)}>Add Employee (RP)</button>
+                <ul>
+                    {itemList}
+                </ul>
+            </>
+        )
+    }
+}
+export default EmployeeList;
+
+/* 4. CustomerList.js */
+import React, { Component } from 'react';
+class CustomerList extends Component {
+    render() {
+        const { itemInputted, handleItemInput, items, addItem } = this.props;
+        let itemList = items.map((item, index) => (
+            <li key={index}>{item}</li>
+        ))
+        return (
+            <>
+                <h2>{this.props.heading}</h2>
+                <label>
+                    Enter customer name:
+                    <input type="text" value={itemInputted} onChange={(e) => handleItemInput(e)} />
+                </label>
+                <button onClick={() => addItem(itemInputted)}>Add Customer (RP)</button>
+                <ul>
+                    {itemList}
+                </ul>
+            </>
+        )
+    }
+}
+export default CustomerList;
+
+
+
 HTTP SERVICE using AXIOS
 ===========================
 >  npm install axios
@@ -523,7 +753,7 @@ HTTP SERVICE using AXIOS
 /* Provides API for HTTP verbs , similar to HTTPClientModule in angular */
 
 GET REQUEST
-----------------
+-----------------------
 axios.get('/user', {
     params: {               // query params
       ID: 12345
@@ -540,7 +770,7 @@ axios.get('/user', {
   });
   
 POST REQUEST
------------------
+-------------------------
 axios.post('/user', {
     firstName: 'Fred',                      // POST req BODY
     lastName: 'Flintstone'
@@ -556,7 +786,7 @@ axios.post('/user', {
   });
   
 RESPONSE for a request contains the following information
---------------------------------------------------------------
+------------------------------------------------------------------------------
 {
   // `data` is the response BODY that was provided by the server
   data: {},
@@ -582,7 +812,7 @@ RESPONSE for a request contains the following information
 }
 
 Handling Errors
-------------------
+-------------------------
 axios.get('/user/12345')
   .catch((error) => {
     if (error.response) {
@@ -653,6 +883,21 @@ export default class AllCommentsPage extends React.Component {   
 
 
 
+FORM HANDLING using FORMIK and YUP
+==================================
+> npm install formik
+> npm install yup
+/* FORMIK is a library for form handling */
+/* YUP provides a variety of schema types for validation */
+/* NOTE : Common functionalities in any form */
+   /* - Setting of initial value in form
+       - Event handling for various form fields
+       - Validation
+       - Handling form submission
+   */
+
+
+
 ROUTES
 =======
  Use of  "axios"  in  place  of     http
@@ -704,7 +949,7 @@ IT HAS A DEFINED DIR STRUCTURE
 
 
 
-React-Bootstrap
+REACT-BOOTSTRAP
 ====================
 > npm install react-bootstrap bootstrap
 
@@ -714,7 +959,7 @@ index.js
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 COMPONENT.js
-----------------
+------------------------
 import Button from 'react-bootstrap/Button';
 import './COMPONENT.css';
 <Button variant="danger" onClick={(evt) => this.decCounter(evt)}>Decrement Counter</Button>
