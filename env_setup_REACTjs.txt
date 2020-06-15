@@ -887,32 +887,116 @@ FORM HANDLING using FORMIK and YUP
 ==================================
 > npm install formik
 > npm install yup
-/* FORMIK is a library for form handling */
+/* FORMIK is a library for form handling , It can be implemented as RENDER PROPS (preferred)  or  HIGHER ORDER COMPONENTS (HOC) */
 /* YUP provides a variety of schema types for validation */
 /* NOTE : Common functionalities in any form */
-   /* - Setting of initial value in form
+   /* 
+       - Setting of initial value in form
        - Event handling for various form fields
        - Validation
        - Handling form submission
    */
+/*
+ - `name` attributes of HTML element acts as `keys` for FORMIK.
+ -  use of  initialValues={{key1: "", key2: ""}}
+ -  use of  enableReinitialize={true}  for resetting the form with new values if initialValues changes.
+ -  use of  <Form></Form>   from FORMIK instead of HTML tag <form></form> because it will automatically handle onSubmit event for it.
+ -  use of  <Field></Field>    from FORMIK instead of HTML tag <input></input> because it will automatically handle initial values and onChange event for it.
+ -  use of  validationSchema   from YUP to handle Form constraints like required , min , max , trim    etc....
+ -  use of `errors` and `touched` props from FORMIK  , similar to touched | untouched , dirty | pristine , valid | invalid in Angular.
+*/
+/*
+ REFERENCE : https://jaredpalmer.com/formik/docs/api/formik
+*/
 
 
 
-ROUTES
-=======
- Use of  "axios"  in  place  of     http
-         "react-router-dom"  similar to app.routing.ts functionality
-         "this.props.history.push('/')"  or  "history.replace('/')"  uses "withRouter"  similar to this.router.navigate([''])
-         "this.props.match.params.id"    similar to ActvatedRoute to get :id from URL
-	 <Redirect  from="OLD_ROUTE"  to="NEW_ROUTE" />
-	 If no path specified in <Route /> , it will consider it as a default just like in c/cpp Switch case
+ROUTING
+==========
+> npm install react-router-dom
+ - `BrowserRouter` provides routing functionality to a component.
+
+ - `Switch` is similar to switch in C/CPP to render a component as of path specified. 
+
+ - `Route` accepts arguments:
+     - path={`/user`}
+     - component={COMPONENT} 
+     - exact                                                     =>     It is recommended to use exact argument for full matching , 
+                                                                             otherwise  for example :   '/user' and '/user/edit'   will render component for /user always if it's `Route` appears before /user/edit  in `Switch`
+    - path={`*`}                                             =>     similar to path = `**` in Angular , for default case i.e. Nothing match or page not found
+
+ - `Redirect` accepts arguments:
+    - to={`/user`}                                           =>     This is path of one of the existing `Route` in `Switch`
+
+ - `NavLink` is used in NavBar which accepts arguments:
+    - to={`/user`}                                            =>     similar to `routerLink`
+    - activeClassName={`CSS_CLASS`}        =>     similar to `routerLinkActive`
+    - exact                                                       =>    similar to `routerLinkActiveOptions`
+
+ - `Link` is similar to <a></a> anchor tag in HTML , but provides application routing whereas 'href' will provide browser routing.
+    - to={`/user/edit/${id}`}
+
+ -  `withRouter` provides HOC functionality to our component and provides functionality to navigate to a specific route using history prop.
+      history is an array of visited locations , 'push' will add a new location to the array and 'replace' will replace the current location in the array with the new one.
+    - this.props.history.push(`/`);                   
+    - this.props.history.replace(`/`);       
+
+ -  PATH PARAMETERS
+    in `Route` for path arg specify path for parameter using  ':' ( colon )  ,   path={`/edit/:VAR`} , use of 
+    to retrieve it's value in component , use                                                 this.props.match.params.VAR    
 	 
-Transition into and Transition out
-------------------------------------------
-Transition into  -->  Prevent to go to a restricted page which requires LOGIN.
 
-Transition out   -->  Prevent user to navigate , if mistakenly click on back arrow or other link , when formdata is modified
-                      use <Prompt /> REACT component from 'react-router-dom' for displaying confirmation 'message' and 'when' to show
+Route transitions
+-------------------------
+It is of two types and are similar to RouteGuard concept in Angular.
+ - Transition IN              =>      similar to `canActivate`
+ - Transition OUT          =>      similar to `canDeactivate`
+
+Transition IN is checked in constructor() { } 
+
+Transition OUT is handled via <Prompt />  from  'react-router-dom'  in render() {} , it accepts arguments:
+ - when={this.state.modified}
+ - message={`Are you sure to leave`}
+
+/* Example */
+import React from 'react';
+import {withRouter, Prompt} from 'react-router-dom';
+class CommentDetail extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      modified: false
+    };
+
+    this.authenticate(props.history);
+  }
+
+  authenticate(history) {
+    let authenticated = window.confirm('Press OK to Login');
+    if (!authenticated) {
+      alert("Not authenticated, hence redirecting back...");
+      history.replace('/');
+    }
+    else {
+      alert("Authenticated, hence proceeding ahead and displaying the details.")
+    }
+  }
+
+  setModified() {
+    this.setState({modified: true})
+  }
+
+  render() {
+    return (
+      <div>
+        <label>ID: </label>
+        <input type="text" defaultValue={this.props.match.params.id} onInput={() => this.setModified()}/>
+        <Prompt when={this.state.modified} message="Are you sure you want to leave ?" />
+      </div>
+    );}
+}
+export default withRouter(CommentDetail);
 
 
 
@@ -953,13 +1037,13 @@ REACT-BOOTSTRAP
 ====================
 > npm install react-bootstrap bootstrap
 
-index.js
--------------
+1. index.js
+----------------
 /* include this before other CSS imports for local styles to get preference over default bootstrap styles */
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-COMPONENT.js
-------------------------
+2. COMPONENT.js
+----------------------------
 import Button from 'react-bootstrap/Button';
 import './COMPONENT.css';
 <Button variant="danger" onClick={(evt) => this.decCounter(evt)}>Decrement Counter</Button>
