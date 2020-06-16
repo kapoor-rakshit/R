@@ -11,8 +11,8 @@ In SPA, only index.html is loaded from web server, all JS, CSS is downloaded and
 
 ANGULAR vs REACT
 =========================
--ANGULAR is a FRAMEWORK ,      REACT is a UI LIBRARY which requires different packages to work with for complete application
--ANGULAR is HTML centric ,     REACT is JS centric
+-ANGULAR is a FRAMEWORK , REACT is a UI LIBRARY which requires different packages to work with for complete application
+-ANGULAR is HTML centric , REACT is JS centric
 -ANGULAR is backed by GOOGLE , REACT is backed by FACEBOOK
 -both differs in their internal architecture.
 
@@ -93,7 +93,7 @@ PROJECT STRUCTURE
 "index.html"
 ------------------
 - located inside  'public'  dir
-- <div id="cont"></div>                    ,  provides "where to render"
+- <div id="cont"></div>                          ,  provides "where to render"
 - <script src="./dist/bundle.js"></script> ,  take all JS from all dirs in cur dir and bundle it to a bundle called bundle.js
 
 "index.js"
@@ -921,17 +921,17 @@ ROUTING
  - `Route` accepts arguments:
      - path={`/user`}
      - component={COMPONENT} 
-     - exact                                                     =>     It is recommended to use exact argument for full matching , 
-                                                                             otherwise  for example :   '/user' and '/user/edit'   will render component for /user always if it's `Route` appears before /user/edit  in `Switch`
-    - path={`*`}                                             =>     similar to path = `**` in Angular , for default case i.e. Nothing match or page not found
+     - exact				=>     It is recommended to use exact argument for full matching ,
+				         otherwise  for example :   '/user' and '/user/edit'   will render component for /user always if it's `Route` appears before /user/edit  in `Switch`
+    - path={`*`}			=>     similar to path = `**` in Angular , for default case i.e. Nothing match or page not found
 
  - `Redirect` accepts arguments:
-    - to={`/user`}                                           =>     This is path of one of the existing `Route` in `Switch`
+    - to={`/user`}			=>     This is path of one of the existing `Route` in `Switch`
 
  - `NavLink` is used in NavBar which accepts arguments:
-    - to={`/user`}                                            =>     similar to `routerLink`
-    - activeClassName={`CSS_CLASS`}        =>     similar to `routerLinkActive`
-    - exact                                                       =>    similar to `routerLinkActiveOptions`
+    - to={`/user`}				=>     similar to `routerLink`
+    - activeClassName={`CSS_CLASS`}		=>     similar to `routerLinkActive`
+    - exact					=>    similar to `routerLinkActiveOptions`
 
  - `Link` is similar to <a></a> anchor tag in HTML , but provides application routing whereas 'href' will provide browser routing.
     - to={`/user/edit/${id}`}
@@ -942,19 +942,19 @@ ROUTING
     - this.props.history.replace(`/`);       
 
  -  PATH PARAMETERS
-    in `Route` for path arg specify path for parameter using  ':' ( colon )  ,   path={`/edit/:VAR`} , use of 
-    to retrieve it's value in component , use                                                 this.props.match.params.VAR    
+    in `Route` for path arg specify path for parameter using  ':' ( colon ) ,	path={`/edit/:VAR`}
+    to retrieve it's value in component , use 				this.props.match.params.VAR    
 	 
 
 Route transitions
 -------------------------
 It is of two types and are similar to RouteGuard concept in Angular.
- - Transition IN              =>      similar to `canActivate`
- - Transition OUT          =>      similar to `canDeactivate`
+ - Transition IN		=>      similar to `canActivate`
+ - Transition OUT		=>      similar to `canDeactivate`
 
-Transition IN is checked in constructor() { } 
+Transition IN is checked in 'constructor() { }' 
 
-Transition OUT is handled via <Prompt />  from  'react-router-dom'  in render() {} , it accepts arguments:
+Transition OUT is handled via <Prompt />  from  'react-router-dom'  in 'render() {}' , it accepts arguments:
  - when={this.state.modified}
  - message={`Are you sure to leave`}
 
