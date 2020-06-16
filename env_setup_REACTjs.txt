@@ -954,9 +954,11 @@ It is of two types and are similar to RouteGuard concept in Angular.
 
 Transition IN is checked in 'constructor() { }' 
 
-Transition OUT is handled via <Prompt />  from  'react-router-dom'  in 'render() {}' , it accepts arguments:
- - when={this.state.modified}
- - message={`Are you sure to leave`}
+Transition OUT is handled via <Prompt />  from  'react-router-dom'  in 'render() {}' , 
+It is called automatically when navigating away from component , but displayed according to `when` argument.
+It accepts arguments:
+ - when={this.state.modified}                               // Boolean
+ - message={`Are you sure to leave`}                   // String
 
 /* Example */
 import React from 'react';
@@ -1005,14 +1007,18 @@ FLUX
 NOTE : It's always recommended to use FLUX within our applications.
 
 It's a principle based on unidirectional flow.
-	"ANYTHING on VIEW must follow ACTION DISPATCHER flow"
+"ANYTHING on VIEW must follow ACTION - DISPATCHER flow"
+"VIEW is SUBSCRIBER , STORE is PUBLISHER"
+"VIEW must not retrieve or update data on MODEL directly , instead it should be done via ACTION which act as co-ordinator between components"
+"ACTION will be dispatched via DISPATCHER , each ACTION will go to all VIEWS (Components) via respective STORE for each VIEW"
+"STORE is application data place or temporary data place for UI component data"
+NOTE : `Refer FLUX PATTERN Screenshot`
 
 Applications might demand new features to be added, which require their testing.
 FLUX provides a maintainability of these features.
-It uses a FLUX ARCHITECTURE.
 
 IT HAS A DEFINED DIR STRUCTURE
--------------------------------
+-------------------------------------------------------
  "ACTIONS" dir
 	Dispatch , action type  and  payload (data , optional but not always)
 
@@ -1030,6 +1036,11 @@ IT HAS A DEFINED DIR STRUCTURE
 	Dispatcher registers here.
 	update internal structure and inform view about change.
 	STORE is a publisher and VIEW is a subscriber.
+
+
+
+TDD
+==========
 
 
 
