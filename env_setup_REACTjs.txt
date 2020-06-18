@@ -424,6 +424,7 @@ Component Lifecycle
 /* Mandatory  to be implemented in ES2015 class components */
 /* It returns the DOM to be rendered */
 /* React achieves fast and responsive UI by re-rendering components on every state change (using .setState) or from changes of props */
+/* React compares REAL and VIRTUAL DOM on every re-rendering as it is VIRTUAL DOM that gets updated on state change and props */
 
 - componentDidMount() {}
 /* similar to ngOninit()/ngAfterViewInit() in angular */
@@ -1004,14 +1005,17 @@ export default withRouter(CommentDetail);
 
 FLUX
 ======
+> npm install flux
 NOTE : It's always recommended to use FLUX within our applications.
 
 It's a principle based on unidirectional flow.
 "ANYTHING on VIEW must follow ACTION - DISPATCHER flow"
 "VIEW is SUBSCRIBER , STORE is PUBLISHER"
-"VIEW must not retrieve or update data on MODEL directly , instead it should be done via ACTION which act as co-ordinator between components"
-"ACTION will be dispatched via DISPATCHER , each ACTION will go to all VIEWS (Components) via respective STORE for each VIEW"
+"VIEW must not retrieve or update data on MODEL directly , instead it should be done by ACTION which act as co-ordinator between components"
+"ACTION will dispatch an ACTION TYPE and PAYLOAD data to all STOREs via DISPATCHER after retrieval or updating MODEL"
 "STORE is application data place or temporary data place for UI component data"
+"Each ACTION will go to all STOREs by DISPATCHER, however each STORE will recognize the action based on ACTION_TYPE and update it's in-memory data for VIEW"
+"STORE will then emit this change to VIEW"
 NOTE : `Refer FLUX PATTERN Screenshot`
 
 Applications might demand new features to be added, which require their testing.
@@ -1026,7 +1030,7 @@ IT HAS A DEFINED DIR STRUCTURE
 	REACT Components.
 
  "CONSTANTS" dir
-	constants for action types strings.
+	constants for ACTION TYPES strings.
 
  "DISPATCHER" dir
 	export Dispatcher class.
