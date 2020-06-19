@@ -1015,16 +1015,16 @@ It's a principle based on unidirectional flow.
 "ACTION will dispatch an ACTION TYPE and PAYLOAD data to all STOREs via DISPATCHER after retrieval or updating MODEL"
 "STORE is application data place or temporary data place for UI component data"
 "Each ACTION will go to all STOREs by DISPATCHER, however each STORE will recognize the action based on ACTION_TYPE and update it's in-memory data for VIEW"
-"STORE will then emit this change to VIEW"
+"STORE will then emit this change to VIEW (components)"
 NOTE : `Refer FLUX PATTERN Screenshot`
 
 Applications might demand new features to be added, which require their testing.
 FLUX provides a maintainability of these features.
 
-IT HAS A DEFINED DIR STRUCTURE
--------------------------------------------------------
+It is recommended to have a defined DIR STRUCTURE
+---------------------------------------------------------------------------
  "ACTIONS" dir
-	Dispatch , action type  and  payload (data , optional but not always)
+	ACTION CLASS and corresponding METHODS.
 
  "COMPONENTS" dir
 	REACT Components.
@@ -1033,13 +1033,10 @@ IT HAS A DEFINED DIR STRUCTURE
 	constants for ACTION TYPES strings.
 
  "DISPATCHER" dir
-	export Dispatcher class.
-	Dispatches actions to all STORES.
+	export Dispatcher() class that is imported from 'flux'
 
  "STORES" dir
-	Dispatcher registers here.
-	update internal structure and inform view about change.
-	STORE is a publisher and VIEW is a subscriber.
+	Dispatcher registers here for actions.
 
 
 
