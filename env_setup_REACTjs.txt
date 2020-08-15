@@ -1003,8 +1003,44 @@ export default withRouter(CommentDetail);
 
 
 
+LAZY LOADING
+===================
+import React, { Suspense, lazy } from 'react';			// NOTE : <Suspense></Suspense> to enclose <Switch></Switch> | lazy() to lazily import a module
+								// REGULAR IMPORT
+// LAZY IMPORT							// import ProductsList from './ProductsComponent';
+const ProductsList = lazy(() => import('./ProductsComponent'));
+
+render() {
+        return (
+            <>
+            <Router>
+            <nav className="navbar navbar-expand-lg sticky-top">
+                <Link className="navbar-brand" to={`/`}>ProductsApp</Link>
+                <NavLink className="nav-item nav-link" to={`/`} activeClassName={`activeNav`} exact>Home</NavLink>
+                <NavLink className="nav-item nav-link" to={`/products`} activeClassName={`activeNav`}>Inventory</NavLink>
+            </nav>
+            <Suspense fallback={<h1>Loading...</h1>}>
+                <Switch>
+                    <Route exact path={`/`} component={AboutComponent}></Route>
+                    <Route exact path={`/home`}>
+                        <Redirect to={`/`}/>
+                    </Route>
+                    <Route exact path={`/products`} component={ProductsList}></Route>
+                    <Route exact path={`/products/add`} component={AddProduct}></Route>
+                    <Route exact path={`/products/detail/:id`} component={ProductDetail}></Route>
+                    <Route exact path={`/products/edit/:id`} component={EditProduct}></Route>
+                    <Route path={`*`} component={PageNotFound}></Route>  
+                </Switch>
+            </Suspense>
+            </Router>
+            </>
+  );
+}
+
+
+
 FLUX
-======
+====================
 > npm install flux
 NOTE : It's always recommended to use FLUX within our applications.
 
