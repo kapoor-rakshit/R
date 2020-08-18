@@ -198,6 +198,23 @@ const App = () => {
 export default App;
 
 
+PURE COMPONENT
+==================
+To ensure that there is no re-render , if state or props have not changed even if .setState({}) is called i.e. their shallow comparison is same.
+we should implement `shouldComponentUpdate()` lifecycle method.
+a `shouldComponentUpdate()` lifecycle method returns true/false signalling re-render or not.
+
+Shallow comparison for primitive data types (string, number, boolean) is merely their value comparison.
+However for non-primitive data types (objects, arrays) it is their base address comparison.
+Eg: arr = [1, 2, 3]     when compared to     arr = [1, 2, 3, 4]      is same as base address for both is same.
+      arr = [1, 2, 3]     when compared to     arr = [...arr, 4]        is different as new address is assigned to arr.
+
+A PureComponent implements `shouldComponentUpdate()` lifecycle method itself (automatically) that performs a shallow comparison on props and state of component.
+If there is no difference, the component is not re-rendered, which gives performance boost.
+Eg: class App extends React.PureComponent { }
+      export default App;
+
+
 Component Reuse + Interpolation + PropertyBinding
 ===================================================
 /* Similar to using component DIRECTIVE as used with child components in angular */
