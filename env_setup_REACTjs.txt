@@ -198,6 +198,20 @@ const App = () => {
 export default App;
 
 
+Difference b/w CLASS and FUNCTIONAL components
+=========================================
+CLASS components
+- also known as "stateful" components because they make use of state.
+- they must have render() method implemented.
+- lifecycle methods exists in it.
+
+FUNCTIONAL components
+- also known as "stateless" components because they do not make use of state and simply accepts data and displays it on UI.
+- no use of render() method.
+- lifecycle methods do not exists.
+Functional components make use of HOOKS to replicate behaviour of state, lifecycle methods  etc.
+
+
 PURE COMPONENT
 ==================
 To ensure that there is no re-render , if state or props have not changed even if .setState({}) is called i.e. their shallow comparison is same.
@@ -370,7 +384,7 @@ export default class EmployeeComponent extends React.Component {
                     );
 	   }
 	  }
-                </EmpConsumer>
+	</EmpConsumer>
 	<EmpConsumer>
                     {(contextVal) => { 
 		return (
@@ -380,7 +394,7 @@ export default class EmployeeComponent extends React.Component {
                     );
 	  }
 	}
-                </EmpConsumer>
+	</EmpConsumer>
 	</>
     );
   }
@@ -1163,6 +1177,54 @@ NOTE : Error boundaries do not catch errors for :
  - Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
  - Server side rendering
  - Errors thrown in the error boundary itself (rather than its children)
+
+
+
+React HOOKS
+==============
+Hooks were introduced in React 16.8
+
+1) Only call Hooks from the Top level
+- Don't call Hooks inside loops, conditions or nested functions
+
+2) Only call Hooks from React functions
+- Call them from within React functional components and not just any regular JavaScript function
+
+(A) useState()
+	State can be managed in functional components using useState() hook.
+	It takes one argument which is initial state and returns a tuple with 
+	- stateVAR , 		similar to this.state = {};
+	- stateFunctionVAR , 	similar to this.setState({});
+	  However,  this.setState({}) acts like a PATCH request which is capable of modifying only a part of state.
+	  But stateFunctionVAR({}) acts like a PUT request which modifies the entire stateVAR.
+	  So it is always recommended to use spread operator for modifying stateVAR.
+	Eg:
+	import React, { useState } from 'react';
+	const TestComponent = () => {
+		const [stateVAR, stateFunctionVAR] = useState({checked: false, count: 0, name: ''});
+
+		function handleChecked() {
+			stateFunctionVAR({...stateVAR, checked: !stateVAR.checked});
+		}
+		function handleCount(e) {
+			stateFunctionVAR({...stateVAR, count: e.target.value});
+		}
+		function handleName(e) {
+			stateFunctionVAR({...stateVAR, name: e.target.value});
+		}
+
+		return (
+			<>
+			<h3>useState - Multiple State Data</h3>
+			<input type="checkbox" onChange={() => handleChecked()} defaultChecked={myObject.checked} />
+			<input type="number" onChange={(evt) => handleCount(evt)} defaultValue={myObject.count} />
+			<input type="text" onChange={(evt) => handleName(evt)} defaultValue={myObject.name} />
+			<br/>
+			<span>Checked: {myObject.checked ? "true" : "false"}, Count: {myObject.count}, Name: {myObject.name}</span>
+			</>
+		);
+	}
+export default TestComponent;
 
 
 
