@@ -206,8 +206,8 @@ a `shouldComponentUpdate()` lifecycle method returns true/false signalling re-re
 
 Shallow comparison for primitive data types (string, number, boolean) is merely their value comparison.
 However for non-primitive data types (objects, arrays) it is their base address comparison.
-Eg: arr = [1, 2, 3]     when compared to     arr = [1, 2, 3, 4]      is same as base address for both is same.
-      arr = [1, 2, 3]     when compared to     arr = [...arr, 4]        is different as new address is assigned to arr.
+Eg: 	arr = [1, 2, 3]     when compared to     arr = [1, 2, 3, 4]	is same as base address for both is same.
+	arr = [1, 2, 3]     when compared to     arr = [...arr, 4]		is different as new address is assigned to arr.
 
 A PureComponent implements `shouldComponentUpdate()` lifecycle method itself (automatically) that performs a shallow comparison on props and state of component.
 If there is no difference, the component is not re-rendered, which gives performance boost.
@@ -294,6 +294,97 @@ class ChildComp2 extends React.Component {
 	}
 }
 export default ChildComp2;
+
+PROP DRILLING
+================
+Prop-drilling refers to passing of data from a component to sub components through props.
+This will become a costly operation down the hierarchy plus unnecessary re-render for sub-components that do not do anything with those props, 
+and merely act as mediator for passing props from it's parent to it's child components.
+
+Usage of REACT CONTEXT API is a solution.
+Steps:
+1. Create a React Context Object.
+2. Create Context Provider Component, that provides data to components deep in the hierarchy.
+3. Create Context Consumer Component, that consumes data provided by Provider directly.
+Eg:
+/* 1. App.js */
+import {EmpProvider} from './EmpContext';
+import EmployeeComponent from './EmployeeComponent';
+class App extends React.Component {
+  render() {
+    return (
+      <EmpProvider>
+        <h1>Context API Demo</h1>
+        <EmployeeComponent />
+      </EmpProvider>
+    );
+  }
+}
+
+/* 2. EmpContext.js */
+import React from 'react';
+// React Context
+export const EmpContext = React.createContext();
+// Context Provider
+export class EmpProvider extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            empname: "Rahul",
+            manager: true
+        }
+    }
+
+    render() {
+        return (
+            <EmpContext.Provider value={{
+                ...this.state,
+                setEmpname: (name) => this.setState({empname: name}),
+                toggleManager: () => this.setState({manager: !this.state.manager}),
+            }}>
+                {this.props.children}
+            </EmpContext.Provider>
+        );
+    }
+}
+// Context Consumer
+export const EmpConsumer = EmpContext.Consumer;
+
+/* 3. EmployeeComponent.js */
+import React from 'react';
+export default class EmployeeComponent extends React.Component {
+  render() {
+    return (
+	<>
+	<EmpConsumer>
+                    {(contextVal) => {
+		return (
+                        <>
+                            <label>Employee Name:
+                                <input type="text" onInput={(e) => contextVal.setEmpname(e.target.value)} defaultValue={contextVal.empname}/>
+                            </label>
+                            <label>  Manager:
+                                <input type="checkbox" onInput={() => contextVal.toggleManager()} defaultChecked={contextVal.manager}/>
+                            </label>
+                        </>   
+                    );
+	   }
+	  }
+                </EmpConsumer>
+	<EmpConsumer>
+                    {(contextVal) => { 
+		return (
+                        <>
+                            <li>{contextVal.empname}, {contextVal.manager ? "Manager" : "Employee"}</li>
+                        </>   
+                    );
+	  }
+	}
+                </EmpConsumer>
+	</>
+    );
+  }
+}
 
 
 
