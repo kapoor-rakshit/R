@@ -1215,12 +1215,11 @@ Hooks were introduced in React 16.8
 
 		return (
 			<>
-			<h3>useState - Multiple State Data</h3>
-			<input type="checkbox" onChange={() => handleChecked()} defaultChecked={myObject.checked} />
-			<input type="number" onChange={(evt) => handleCount(evt)} defaultValue={myObject.count} />
-			<input type="text" onChange={(evt) => handleName(evt)} defaultValue={myObject.name} />
+			<input type="checkbox" onChange={() => handleChecked()} defaultChecked={stateVAR.checked} />
+			<input type="number" onChange={(evt) => handleCount(evt)} defaultValue={stateVAR.count} />
+			<input type="text" onChange={(evt) => handleName(evt)} defaultValue={stateVAR.name} />
 			<br/>
-			<span>Checked: {myObject.checked ? "true" : "false"}, Count: {myObject.count}, Name: {myObject.name}</span>
+			<span>Checked: {stateVAR.checked ? "true" : "false"}, Count: {stateVAR.count}, Name: {stateVAR.name}</span>
 			</>
 		);
 	}
@@ -1288,9 +1287,15 @@ import './COMPONENT.css';
 
 STYLE
 =========== 
-NOTE : 'className' attr is used and not 'class' attr is used in HTML tags for CSS because 'class' is a reserved JS keyword.
+NOTE :	'className' attr is used and not 'class' attr is used in HTML tags for CSS because 'class' is a reserved JS keyword.
 	example:
 		<div className={`CLASS_NAME_1 CLASS_NAME_2`}>  ...  </div>
+	To style an element with the inline style attribute, the value must be a JavaScript object.
+	In JSX, JavaScript expressions are written inside curly braces, and since JavaScript objects also use curly braces, 
+	the styling in the examples is thus written inside two sets of curly braces {{}}.
+	examples:
+		<h1 style={{color: "red"}}>Hello Style!</h1>
+		<h1 style={{backgroundColor: "lightblue"}}>Hello Style!</h1>
 	
 - Conditional assignment of CSS Classes
   Here CLASS_NAME_1 , CLASS_NAME_2 are always applied on DIV , however CLASS_1 and CLASS_2 are applied or toggled accordingly.
