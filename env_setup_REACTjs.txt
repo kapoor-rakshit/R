@@ -241,7 +241,7 @@ function App() {
 	let logo = "<PATH_TO_IMAGE>";
 	return (
 		<p>{i * 5 + 7}</p>                                            // Interpolation, NOTE: use of single { }
-		<img src={logo} className="App-logo" alt="logo" />            // Property Binding
+		<img src={logo} className={`App-logo`} alt="logo" />            // Property Binding
 		<React.Fragment>
 			<ChildComp1/><ChildComp2/>
 		</React.Fragment>
@@ -567,7 +567,7 @@ Component Lifecycle
 CONDITIONAL COMPONENTS   (similar to *ngIf in angular)
 ========================
 {
-   this.props.showMe && (
+   !!this.state.showMe && (
 	<button type="button" className={`btn btn-success`}>Unhide</button>
 	<br/>
 	<p>Check message</p>
@@ -1236,6 +1236,22 @@ Hooks were introduced in React 16.8
 		);
 	}
 export default TestComponent;
+
+(B) useEffect()
+	It is used to replicate behavior of lifecycle methods as in CLASS Components.
+	It accepts two arguments:
+	- a function that defines task to be done 
+	  plus can return a cleanup function , similar to componentWillUnmount()
+	- array of DEPENDENT variables whose change will trigger the above function.
+	Following cases might arise:
+	(i) useEffect() without specifying DEPENDENT argument array
+	    ALWAYS called on initial render() plus re-render() for every state or props VAR
+
+	(ii) useEffect() specifying DEPENDENT argument array as empty array
+	     ONLY called on initial render() , similar to componentDidMount()
+
+	(iii) useEffect() specifying DEPENDENT argument array values
+	      ONLY called on initial render() plus re-render() for specified state or props VAR
 
 
 
