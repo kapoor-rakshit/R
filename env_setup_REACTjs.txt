@@ -564,6 +564,18 @@ Component Lifecycle
 
 
 
+CONDITIONAL COMPONENTS   (similar to *ngIf in angular)
+========================
+{
+   this.props.showMe && (
+	<button type="button" className={`btn btn-success`}>Unhide</button>
+	<br/>
+	<p>Check message</p>
+	)
+   }
+
+
+
 COMPOSABLE COMPONENTS   (similar to *ngFor in angular)
 ========================
 /* 1. AllCommentsPage.js */
