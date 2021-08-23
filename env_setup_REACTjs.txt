@@ -1252,7 +1252,45 @@ export default TestComponent;
 
 	(iii) useEffect() specifying DEPENDENT argument array values
 	      ONLY called on initial render() plus re-render() for specified state or props VAR
+	Eg:
+	useEffect(() => {
+    		document.title = `You clicked ${count} times`;
+		
+		return ()=> {
+			{/* CLEAN UP CODE HERE like UNSUBSCRIBING from a service */}
+		};
+  	}, [var1, var2, var3]);
+	
+(C) useReducer()
+	It allows us to explicitly specify functionality for function that is returned by useState() hook.
+	Thus, it accepts two arguments:
+	- a function definition for setting state
+	- an initial state for state variable
+	and returns a tuple, similar to useState(), which is a state variable and a function to set state.
+	Eg:
+	const initialState = {count: 0};
 
+	function reducer(state, action) {
+  		switch (action.type) {
+    			case 'increment':
+      				return {count: state.count + 1};
+    			case 'decrement':
+      				return {count: state.count - 1};
+    			default:
+      				throw new Error();
+  		}
+	}
+
+	function Counter() {
+  		const [state, dispatch] = useReducer(reducer, initialState);
+  		return (
+    			<>
+      			Count: {state.count}
+      			<button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      			<button onClick={() => dispatch({type: 'increment'})}>+</button>
+    			</>
+  		);
+	}
 
 
 FLUX
