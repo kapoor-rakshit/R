@@ -1242,7 +1242,7 @@ export default TestComponent;
 	It accepts two arguments:
 	- a function that defines task to be done 
 	  plus can return a cleanup function , similar to componentWillUnmount()
-	- array of DEPENDENT variables whose change will trigger the above function.
+	- a DEPENDENCY ARRAY or array of DEPENDENT variables whose change will trigger the above function.
 	Following cases might arise:
 	(i) useEffect() without specifying DEPENDENT argument array
 	    ALWAYS called on initial render() plus re-render() for every state or props VAR
